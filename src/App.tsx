@@ -63,39 +63,37 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen w-full bg-surface-container flex justify-center">
-      <div className="relative w-full max-w-[480px] min-h-screen bg-background md:shadow-xl">
-        {screen.name === 'home' && <HomeScreen onOpenPlot={plotId => setScreen({ name: 'plot', plotId })} />}
+    <div className="min-h-screen">
+      {screen.name === 'home' && <HomeScreen onOpenPlot={plotId => setScreen({ name: 'plot', plotId })} />}
 
-        {screen.name === 'plot' && (
-          <PlotDetailScreen
-            plotId={screen.plotId}
-            onBack={() => setScreen({ name: 'home' })}
-            onAdd={() => setScreen({ name: 'picker', plotId: screen.plotId })}
-          />
-        )}
+      {screen.name === 'plot' && (
+        <PlotDetailScreen
+          plotId={screen.plotId}
+          onBack={() => setScreen({ name: 'home' })}
+          onAdd={() => setScreen({ name: 'picker', plotId: screen.plotId })}
+        />
+      )}
 
-        {screen.name === 'picker' && (
-          <ActivityPicker
-            onBack={() => setScreen(screen.plotId ? { name: 'plot', plotId: screen.plotId } : { name: 'home' })}
-            onSelect={moduleKey => setScreen({ name: 'form', plotId: screen.plotId, moduleKey })}
-          />
-        )}
+      {screen.name === 'picker' && (
+        <ActivityPicker
+          onBack={() => setScreen(screen.plotId ? { name: 'plot', plotId: screen.plotId } : { name: 'home' })}
+          onSelect={moduleKey => setScreen({ name: 'form', plotId: screen.plotId, moduleKey })}
+        />
+      )}
 
-        {screen.name === 'form' && (
-          <ActivityForm
-            moduleKey={screen.moduleKey}
-            plotCount={store.getPlots().filter(p => p.farmerId === store.getFarmers()[0].id).length}
-            onBack={() => setScreen({ name: 'picker', plotId: screen.plotId })}
-            onSave={(payload, applyAll) => handleSaveActivity(screen.moduleKey, screen.plotId, payload, applyAll)}
-          />
-        )}
+      {screen.name === 'form' && (
+        <ActivityForm
+          moduleKey={screen.moduleKey}
+          plotCount={store.getPlots().filter(p => p.farmerId === store.getFarmers()[0].id).length}
+          onBack={() => setScreen({ name: 'picker', plotId: screen.plotId })}
+          onSave={(payload, applyAll) => handleSaveActivity(screen.moduleKey, screen.plotId, payload, applyAll)}
+        />
+      )}
 
-        {screen.name === 'impact' && <ImpactScreen />}
-        {screen.name === 'profile' && <ProfileScreen />}
+      {screen.name === 'impact' && <ImpactScreen />}
+      {screen.name === 'profile' && <ProfileScreen />}
 
-        {showBottomNav && <BottomNav active={activeNav} onNavigate={handleNav} />}
-      </div>
+      {showBottomNav && <BottomNav active={activeNav} onNavigate={handleNav} />}
     </div>
   )
 }

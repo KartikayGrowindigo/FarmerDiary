@@ -11,7 +11,7 @@ const ITEMS: { key: NavKey; icon: string; label: string }[] = [
 
 export default function BottomNav({ active, onNavigate }: { active: NavKey; onNavigate: (k: NavKey) => void }) {
   return (
-    <nav className="bg-surface-container-lowest shadow-[0_-4px_12px_rgba(0,0,0,0.06)] fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50 flex justify-around items-center h-touch-target-min px-margin-edge pb-2 pt-2 rounded-t-xl">
+    <nav className="bg-surface-container-lowest shadow-[0_-4px_12px_rgba(0,0,0,0.06)] fixed bottom-0 w-full z-50 flex justify-around items-center h-touch-target-min px-margin-edge pb-2 pt-2 rounded-t-xl">
       {ITEMS.map(item => {
         const isActive = item.key === active
         return (
