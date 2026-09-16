@@ -91,7 +91,7 @@ export default function ActivityForm({
         </section>
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-margin-edge bg-surface/90 backdrop-blur-md z-20 border-t border-surface-variant">
+      <div className="fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] p-margin-edge bg-surface/90 backdrop-blur-md z-20 border-t border-surface-variant">
         <button
           onClick={() => onSave({ ...values, date }, applyAll)}
           className="w-full h-touch-target-min bg-primary text-on-primary rounded-xl text-headline-sm font-headline-sm flex items-center justify-center gap-3 active:scale-98 transition-transform shadow-lg"

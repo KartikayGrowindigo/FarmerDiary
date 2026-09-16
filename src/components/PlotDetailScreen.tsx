@@ -96,9 +96,13 @@ export default function PlotDetailScreen({ plotId, onBack, onAdd }: { plotId: st
         ))}
       </main>
 
-      <button onClick={onAdd} className="fixed bottom-[24px] right-margin-edge w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40 text-on-primary">
-        <span className="material-symbols-outlined text-[28px]">add</span>
-      </button>
+      <div className="fixed inset-x-0 bottom-0 z-40 flex justify-center pointer-events-none">
+        <div className="relative w-full max-w-[480px] h-0">
+          <button onClick={onAdd} className="pointer-events-auto absolute bottom-[24px] right-margin-edge w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all text-on-primary">
+            <span className="material-symbols-outlined text-[28px]">add</span>
+          </button>
+        </div>
+      </div>
     </div>
   )
 }
