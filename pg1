@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kheti Portal - Home</title>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-tertiary": "#ffffff",
+                        "on-primary": "#ffffff",
+                        "on-primary-fixed-variant": "#00504d",
+                        "primary": "#005652",
+                        "inverse-on-surface": "#f3f0f0",
+                        "primary-container": "#1f6f6b",
+                        "background": "#fcf9f8",
+                        "on-surface": "#1b1c1c",
+                        "on-surface-variant": "#3f4948",
+                        "on-secondary-container": "#663500",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "on-tertiary-container": "#e3e1dd",
+                        "on-primary-fixed": "#00201e",
+                        "on-background": "#1b1c1c",
+                        "on-tertiary-fixed": "#1b1c1a",
+                        "surface-container-high": "#eae7e7",
+                        "surface-container-low": "#f6f3f2",
+                        "tertiary-fixed-dim": "#c8c6c3",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "on-primary-container": "#a5efe9",
+                        "surface-dim": "#dcd9d9",
+                        "on-error-container": "#93000a",
+                        "secondary": "#904d00",
+                        "inverse-primary": "#8ad3ce",
+                        "secondary-container": "#fe932c",
+                        "primary-fixed": "#a6f0ea",
+                        "on-secondary": "#ffffff",
+                        "primary-fixed-dim": "#8ad3ce",
+                        "tertiary": "#4c4c4a",
+                        "on-secondary-fixed": "#2f1500",
+                        "outline": "#6f7978",
+                        "error-container": "#ffdad6",
+                        "outline-variant": "#bec9c7",
+                        "secondary-fixed": "#ffdcc3",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "surface-tint": "#166965",
+                        "surface-container-highest": "#e4e2e1",
+                        "tertiary-fixed": "#e4e2de",
+                        "surface-container-lowest": "#ffffff",
+                        "surface": "#fcf9f8",
+                        "surface-container": "#f0eded",
+                        "surface-bright": "#fcf9f8",
+                        "on-error": "#ffffff",
+                        "tertiary-container": "#646461",
+                        "inverse-surface": "#303030",
+                        "error": "#ba1a1a",
+                        "surface-variant": "#e4e2e1"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-edge": "20px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "gutter": "16px",
+                        "stack-sm": "8px",
+                        "touch-target-min": "56px"
+                    },
+                    "fontFamily": {
+                        "punjabi-subtext": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "punjabi-subtext": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        body { font-family: 'Plus Jakarta Sans', sans-serif; }
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .progress-ring__circle {
+            transition: stroke-dashoffset 0.35s;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background min-h-screen text-on-surface pb-[90px]">
+<!-- TopAppBar -->
+<header class="bg-surface shadow-sm sticky top-0 z-40 w-full">
+<div class="flex flex-col justify-center w-full px-margin-edge py-stack-md">
+<div class="flex justify-between items-start mb-stack-sm">
+<div>
+<h1 class="text-headline-md font-headline-md font-bold text-primary">Kheti Portal</h1>
+<p class="text-body-md font-body-md text-on-surface-variant">Manmohan Singh Toor · Sherpur Kalan</p>
+</div>
+<div class="w-12 h-12 bg-surface-container-high rounded-full flex items-center justify-center overflow-hidden">
+<img class="w-full h-full object-cover" data-alt="A professional portrait of a Punjabi farmer in his late 40s wearing a turban. The lighting is warm and outdoor, casting soft shadows. The background is slightly blurred showing vibrant green fields. The style is modern, realistic, and highly detailed, conveying trustworthiness and experience." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD9ctr611CnbqX48DDKr6BmI5dibHRQdf4NcndnAsxM-x2rthEFWarEfZlhHyPfKyA3ltLonxODHFRORwUgaPK0yPfwoi6qk5Q0L4I-80sOaX9HH3m_K-LOz2AqKUQT2U81f9Fzluy1MKX3dyTq1J0qZ_XFr-7cYJ2cMi131arISzoizl5IEdDkWCfTFimEJ7xpbUZ9cBJhHP9VEncTYl-SwbE2t1btVhI7bJtPxetOJBNwNJZ3zyr3"/>
+</div>
+</div>
+<div>
+<span class="inline-flex items-center px-3 py-1 rounded-full bg-secondary-container text-on-secondary-container text-label-caps font-label-caps">
+                    Wheat · Rabi 2025-26
+                </span>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="px-margin-edge py-stack-lg flex flex-col gap-stack-lg">
+<!-- Plot Cards List -->
+<div class="flex flex-col gap-stack-md">
+<!-- Plot 1 -->
+<button class="w-full bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] active:scale-[0.98] transition-transform duration-150 text-left flex items-center justify-between min-h-[96px] group hover:bg-surface-container-low">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-[20px]">agriculture</span>
+<span class="text-headline-sm font-headline-sm">#H72</span>
+</div>
+<div class="flex items-baseline gap-1 text-on-surface">
+<span class="text-headline-md font-headline-md">3.6</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Acres <span class="text-punjabi-subtext font-punjabi-subtext ml-1">(ਏਕੜ)</span></span>
+</div>
+</div>
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="150.72" stroke-linecap="round" stroke-width="8"></circle> <!-- 40% (2/5) -->
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-primary">
+<span class="text-body-md font-body-md font-bold leading-none">2/5</span>
+</div>
+</div>
+</button>
+<!-- Plot 2 -->
+<button class="w-full bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] active:scale-[0.98] transition-transform duration-150 text-left flex items-center justify-between min-h-[96px] group hover:bg-surface-container-low">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-[20px]">agriculture</span>
+<span class="text-headline-sm font-headline-sm">#G15</span>
+</div>
+<div class="flex items-baseline gap-1 text-on-surface">
+<span class="text-headline-md font-headline-md">2.6</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Acres <span class="text-punjabi-subtext font-punjabi-subtext ml-1">(ਏਕੜ)</span></span>
+</div>
+</div>
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="50.24" stroke-linecap="round" stroke-width="8"></circle> <!-- 80% (4/5) -->
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-primary">
+<span class="text-body-md font-body-md font-bold leading-none">4/5</span>
+</div>
+</div>
+</button>
+<!-- Plot 3 -->
+<button class="w-full bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] active:scale-[0.98] transition-transform duration-150 text-left flex items-center justify-between min-h-[96px] group hover:bg-surface-container-low">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-[20px]">agriculture</span>
+<span class="text-headline-sm font-headline-sm">#K09</span>
+</div>
+<div class="flex items-baseline gap-1 text-on-surface">
+<span class="text-headline-md font-headline-md">5.9</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Acres <span class="text-punjabi-subtext font-punjabi-subtext ml-1">(ਏਕੜ)</span></span>
+</div>
+</div>
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="200.96" stroke-linecap="round" stroke-width="8"></circle> <!-- 20% (1/5) -->
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-primary">
+<span class="text-body-md font-body-md font-bold leading-none">1/5</span>
+</div>
+</div>
+</button>
+<!-- Plot 4 -->
+<button class="w-full bg-surface-container-lowest rounded-xl p-5 shadow-[0_4px_12px_rgba(0,0,0,0.06)] active:scale-[0.98] transition-transform duration-150 text-left flex items-center justify-between min-h-[96px] group hover:bg-surface-container-low">
+<div class="flex flex-col gap-1">
+<div class="flex items-center gap-2 text-primary font-bold">
+<span class="material-symbols-outlined text-[20px]">agriculture</span>
+<span class="text-headline-sm font-headline-sm">#L42</span>
+</div>
+<div class="flex items-baseline gap-1 text-on-surface">
+<span class="text-headline-md font-headline-md">6.3</span>
+<span class="text-body-md font-body-md text-on-surface-variant">Acres <span class="text-punjabi-subtext font-punjabi-subtext ml-1">(ਏਕੜ)</span></span>
+</div>
+</div>
+<div class="relative w-16 h-16 flex items-center justify-center">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="40" stroke-width="8"></circle>
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="40" stroke-dasharray="251.2" stroke-dashoffset="0" stroke-linecap="round" stroke-width="8"></circle> <!-- 100% (5/5) -->
+</svg>
+<div class="absolute inset-0 flex flex-col items-center justify-center text-primary">
+<span class="text-body-md font-body-md font-bold leading-none">5/5</span>
+</div>
+</div>
+</button>
+</div>
+</main>
+<!-- BottomNavBar -->
+<nav class="md:hidden bg-surface-container-lowest shadow-[0_-4px_12px_rgba(0,0,0,0.06)] fixed bottom-0 w-full z-50 flex justify-around items-center h-touch-target-min px-margin-edge pb-2 pt-2 rounded-t-xl">
+<!-- Home (Active) -->
+<button class="flex flex-col items-center justify-center text-primary font-bold scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 px-4 py-1 rounded-xl group relative">
+<span class="material-symbols-outlined" data-weight="fill" style="font-variation-settings: 'FILL' 1;">home</span>
+<span class="text-label-caps font-label-caps mt-1">Home</span>
+<div class="absolute -bottom-1 w-1 h-1 bg-primary rounded-full"></div>
+</button>
+<!-- Add (Inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 px-4 py-1 rounded-xl">
+<span class="material-symbols-outlined">add_circle</span>
+<span class="text-label-caps font-label-caps mt-1">Add</span>
+</button>
+<!-- Impact (Inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 px-4 py-1 rounded-xl">
+<span class="material-symbols-outlined">leaderboard</span>
+<span class="text-label-caps font-label-caps mt-1">Impact</span>
+</button>
+<!-- Profile (Inactive) -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 px-4 py-1 rounded-xl">
+<span class="material-symbols-outlined">person</span>
+<span class="text-label-caps font-label-caps mt-1">Profile</span>
+</button>
+</nav>
+</body></html>

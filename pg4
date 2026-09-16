@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Kheti Portal - Impact</title>
+<!-- Material Symbols Outlined -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Plus Jakarta Sans Font -->
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<!-- Tailwind CSS with Forms and Container Queries -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Configuration -->
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-high": "#eae7e7",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "secondary": "#904d00",
+                        "outline-variant": "#bec9c7",
+                        "inverse-primary": "#8ad3ce",
+                        "on-primary-fixed-variant": "#00504d",
+                        "on-background": "#1b1c1c",
+                        "background": "#fcf9f8",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-container": "#a5efe9",
+                        "on-surface-variant": "#3f4948",
+                        "tertiary-container": "#646461",
+                        "primary-fixed-dim": "#8ad3ce",
+                        "on-surface": "#1b1c1c",
+                        "tertiary-fixed-dim": "#c8c6c3",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "on-tertiary-container": "#e3e1dd",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "on-secondary-container": "#663500",
+                        "secondary-fixed": "#ffdcc3",
+                        "inverse-on-surface": "#f3f0f0",
+                        "on-primary": "#ffffff",
+                        "surface-dim": "#dcd9d9",
+                        "on-error": "#ffffff",
+                        "on-primary-fixed": "#00201e",
+                        "tertiary-fixed": "#e4e2de",
+                        "primary-fixed": "#a6f0ea",
+                        "tertiary": "#4c4c4a",
+                        "outline": "#6f7978",
+                        "surface-container": "#f0eded",
+                        "on-tertiary": "#ffffff",
+                        "primary": "#005652",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "error-container": "#ffdad6",
+                        "surface-bright": "#fcf9f8",
+                        "secondary-container": "#fe932c",
+                        "on-tertiary-fixed": "#1b1c1a",
+                        "surface-tint": "#166965",
+                        "surface-container-highest": "#e4e2e1",
+                        "surface": "#fcf9f8",
+                        "primary-container": "#1f6f6b",
+                        "on-secondary": "#ffffff",
+                        "surface-container-low": "#f6f3f2",
+                        "inverse-surface": "#303030",
+                        "surface-variant": "#e4e2e1",
+                        "on-secondary-fixed": "#2f1500",
+                        "brand-green": "#008A2E",
+                        "brand-terracotta": "#C34129",
+                        "brand-amber": "#D97706"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "stack-lg": "24px",
+                        "stack-md": "16px",
+                        "margin-edge": "20px",
+                        "gutter": "16px",
+                        "touch-target-min": "56px"
+                    },
+                    "fontFamily": {
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"],
+                        "punjabi-subtext": ["Plus Jakarta Sans"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }],
+                        "punjabi-subtext": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface min-h-screen flex flex-col pb-24 md:pb-0">
+<!-- TopAppBar -->
+<header class="bg-surface dark:bg-surface-dim shadow-sm docked full-width top-0 z-40 sticky">
+<div class="flex flex-col justify-center w-full px-margin-edge py-stack-md">
+<div class="flex items-center justify-between min-h-touch-target-min">
+<!-- Leading -->
+<div class="flex items-center gap-gutter">
+<div class="w-10 h-10 rounded-full bg-surface-container-high overflow-hidden flex items-center justify-center shrink-0">
+<span class="text-body-md font-body-md text-primary font-bold">MT</span>
+</div>
+</div>
+<!-- Headline -->
+<div class="text-center flex-1">
+<h1 class="text-headline-md font-headline-md font-bold text-primary dark:text-inverse-primary">Impact</h1>
+</div>
+<!-- Trailing -->
+<div class="flex items-center gap-gutter">
+<span class="text-label-caps font-label-caps text-on-surface-variant bg-surface-container px-3 py-1.5 rounded-full">Wheat · Rabi 2025-26</span>
+</div>
+</div>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 w-full max-w-2xl mx-auto px-margin-edge py-stack-lg flex flex-col gap-stack-lg">
+<!-- Hero Card: Savings -->
+<div class="bg-surface-container-lowest rounded-[16px] p-[20px] shadow-[0_4px_12px_rgba(0,0,0,0.06)] active:shadow-none active:scale-98 transition-all duration-200">
+<div class="flex flex-col items-center text-center gap-stack-sm">
+<span class="material-symbols-outlined text-[40px] text-brand-green mb-2" style="font-variation-settings: 'FILL' 1;">payments</span>
+<h2 class="text-headline-lg font-headline-lg text-brand-green">₹1,240</h2>
+<p class="text-body-lg font-body-lg text-on-surface">saved per acre</p>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant mt-1">compared to last season</p>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant opacity-80">ਪਿਛਲੇ ਸੀਜ਼ਨ ਦੇ ਮੁਕਾਬਲੇ</p>
+</div>
+</div>
+<!-- Secondary Card: Emissions -->
+<div class="bg-surface-container-lowest rounded-[16px] p-[20px] shadow-[0_4px_12px_rgba(0,0,0,0.06)] active:shadow-none active:scale-98 transition-all duration-200 flex items-center justify-between">
+<div class="flex flex-col gap-1">
+<p class="text-body-lg font-body-lg text-on-surface">18% lower emissions</p>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">— estimated</p>
+</div>
+<div class="w-12 h-12 rounded-full bg-brand-green/10 flex items-center justify-center shrink-0">
+<span class="material-symbols-outlined text-brand-green text-2xl" style="font-variation-settings: 'FILL' 1;">arrow_downward</span>
+</div>
+</div>
+<!-- Section: What Changed Chart -->
+<div class="flex flex-col gap-stack-md mt-4">
+<div class="flex flex-col gap-1">
+<h3 class="text-headline-sm font-headline-sm text-on-surface">What changed</h3>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਕੀ ਬਦਲਿਆ</p>
+</div>
+<div class="bg-surface-container-lowest rounded-[16px] p-[20px] shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex flex-col gap-stack-lg">
+<!-- Row 1: Residue -->
+<div class="flex items-center gap-4">
+<div class="w-24 shrink-0 flex flex-col">
+<span class="text-body-md font-body-md text-on-surface">Residue</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant">ਰਹਿੰਦ-ਖੂੰਹਦ</span>
+</div>
+<div class="flex-1 h-8 bg-surface-container rounded-full relative overflow-hidden flex items-center">
+<div class="absolute left-1/2 w-[35%] h-full bg-brand-green rounded-r-full"></div>
+<div class="absolute left-1/2 top-0 bottom-0 w-px bg-outline-variant z-10"></div>
+</div>
+</div>
+<!-- Row 2: Fertilizer -->
+<div class="flex items-center gap-4">
+<div class="w-24 shrink-0 flex flex-col">
+<span class="text-body-md font-body-md text-on-surface">Fertilizer</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant">ਖਾਦ</span>
+</div>
+<div class="flex-1 h-8 bg-surface-container rounded-full relative overflow-hidden flex items-center">
+<div class="absolute left-1/2 w-[20%] h-full bg-brand-green rounded-r-full"></div>
+<div class="absolute left-1/2 top-0 bottom-0 w-px bg-outline-variant z-10"></div>
+</div>
+</div>
+<!-- Row 3: Irrigation -->
+<div class="flex items-center gap-4">
+<div class="w-24 shrink-0 flex flex-col">
+<span class="text-body-md font-body-md text-on-surface">Irrigation</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant">ਸਿੰਚਾਈ</span>
+</div>
+<div class="flex-1 h-8 bg-surface-container rounded-full relative overflow-hidden flex items-center">
+<div class="absolute right-1/2 w-[15%] h-full bg-brand-terracotta rounded-l-full"></div>
+<div class="absolute left-1/2 top-0 bottom-0 w-px bg-outline-variant z-10"></div>
+</div>
+</div>
+<!-- Row 4: Diesel -->
+<div class="flex items-center gap-4">
+<div class="w-24 shrink-0 flex flex-col">
+<span class="text-body-md font-body-md text-on-surface">Diesel</span>
+<span class="text-label-caps font-label-caps text-on-surface-variant">ਡੀਜ਼ਲ</span>
+</div>
+<div class="flex-1 h-8 bg-surface-container rounded-full relative overflow-hidden flex items-center">
+<div class="absolute left-1/2 w-[45%] h-full bg-brand-green rounded-r-full"></div>
+<div class="absolute left-1/2 top-0 bottom-0 w-px bg-outline-variant z-10"></div>
+</div>
+</div>
+<div class="flex justify-between text-label-caps font-label-caps text-outline px-24 mt-2">
+<span>Worse</span>
+<span>Better</span>
+</div>
+</div>
+</div>
+<!-- Suggestion Card -->
+<div class="bg-brand-amber/10 border border-brand-amber/20 rounded-[16px] p-[20px] mt-4 flex gap-4">
+<span class="material-symbols-outlined text-brand-amber shrink-0 mt-1" style="font-variation-settings: 'FILL' 1;">lightbulb</span>
+<div class="flex flex-col gap-2">
+<p class="text-body-md font-body-md text-on-surface font-bold">Advice for next season</p>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">Consider direct seeding to save more on diesel.</p>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant opacity-80">ਅਗਲੇ ਸੀਜ਼ਨ ਲਈ ਸਿੱਧੀ ਬਿਜਾਈ 'ਤੇ ਵਿਚਾਰ ਕਰੋ।</p>
+</div>
+</div>
+</main>
+<!-- BottomNavBar (Mobile Only) -->
+<nav class="md:hidden bg-surface-container-lowest dark:bg-surface-container shadow-[0_-4px_12px_rgba(0,0,0,0.06)] docked full-width bottom-0 rounded-t-xl fixed bottom-0 w-full z-50 flex justify-around items-center h-touch-target-min px-margin-edge pb-2">
+<!-- Home -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-primary-fixed-dim/20 scale-98 active:scale-95 transition-all duration-200 w-16 h-full pt-2" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">home</span>
+<span class="text-label-caps font-label-caps">Home</span>
+</a>
+<!-- Add -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-primary-fixed-dim/20 scale-98 active:scale-95 transition-all duration-200 w-16 h-full pt-2" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">add_circle</span>
+<span class="text-label-caps font-label-caps">Add</span>
+</a>
+<!-- Impact (Active) -->
+<a class="flex flex-col items-center justify-center text-primary dark:text-inverse-primary font-bold hover:bg-primary-fixed-dim/20 scale-98 active:scale-95 transition-all duration-200 w-16 h-full pt-2 relative" href="#">
+<div class="absolute top-1 left-1/2 -translate-x-1/2 w-1.5 h-1.5 bg-primary rounded-full"></div>
+<span class="material-symbols-outlined mb-1 text-[24px]" style="font-variation-settings: 'FILL' 1;">leaderboard</span>
+<span class="text-label-caps font-label-caps">Impact</span>
+</a>
+<!-- Profile -->
+<a class="flex flex-col items-center justify-center text-on-surface-variant dark:text-outline-variant hover:bg-primary-fixed-dim/20 scale-98 active:scale-95 transition-all duration-200 w-16 h-full pt-2" href="#">
+<span class="material-symbols-outlined mb-1 text-[24px]">person</span>
+<span class="text-label-caps font-label-caps">Profile</span>
+</a>
+</nav>
+</body></html>

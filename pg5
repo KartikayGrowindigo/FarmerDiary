@@ -1,0 +1,271 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Plot Details - Kheti Portal</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                            "on-tertiary": "#ffffff",
+                            "tertiary-fixed": "#e4e2de",
+                            "on-tertiary-fixed-variant": "#474744",
+                            "on-tertiary-fixed": "#1b1c1a",
+                            "on-secondary-fixed": "#2f1500",
+                            "on-secondary": "#ffffff",
+                            "primary-fixed": "#a6f0ea",
+                            "on-primary": "#ffffff",
+                            "tertiary": "#4c4c4a",
+                            "secondary-fixed": "#ffdcc3",
+                            "tertiary-container": "#646461",
+                            "secondary-container": "#fe932c",
+                            "tertiary-fixed-dim": "#c8c6c3",
+                            "surface-dim": "#dcd9d9",
+                            "inverse-surface": "#303030",
+                            "on-secondary-fixed-variant": "#6e3900",
+                            "background": "#fcf9f8",
+                            "inverse-on-surface": "#f3f0f0",
+                            "surface-bright": "#fcf9f8",
+                            "secondary": "#904d00",
+                            "on-surface": "#1b1c1c",
+                            "on-primary-fixed-variant": "#00504d",
+                            "on-primary-container": "#a5efe9",
+                            "primary-container": "#1f6f6b",
+                            "on-primary-fixed": "#00201e",
+                            "surface-variant": "#e4e2e1",
+                            "surface-tint": "#166965",
+                            "outline-variant": "#bec9c7",
+                            "surface-container-highest": "#e4e2e1",
+                            "on-surface-variant": "#3f4948",
+                            "surface-container-high": "#eae7e7",
+                            "on-tertiary-container": "#e3e1dd",
+                            "outline": "#6f7978",
+                            "on-secondary-container": "#663500",
+                            "on-error-container": "#93000a",
+                            "secondary-fixed-dim": "#ffb77d",
+                            "error": "#ba1a1a",
+                            "on-error": "#ffffff",
+                            "surface": "#fcf9f8",
+                            "surface-container-low": "#f6f3f2",
+                            "on-background": "#1b1c1c",
+                            "primary-fixed-dim": "#8ad3ce",
+                            "inverse-primary": "#8ad3ce",
+                            "surface-container": "#f0eded",
+                            "error-container": "#ffdad6",
+                            "primary": "#005652",
+                            "surface-container-lowest": "#ffffff"
+                    },
+                    "borderRadius": {
+                            "DEFAULT": "0.25rem",
+                            "lg": "0.5rem",
+                            "xl": "0.75rem",
+                            "full": "9999px"
+                    },
+                    "spacing": {
+                            "touch-target-min": "56px",
+                            "stack-md": "16px",
+                            "margin-edge": "20px",
+                            "gutter": "16px",
+                            "stack-sm": "8px",
+                            "stack-lg": "24px"
+                    },
+                    "fontFamily": {
+                            "headline-sm": [
+                                    "Plus Jakarta Sans"
+                            ],
+                            "headline-md": [
+                                    "Plus Jakarta Sans"
+                            ],
+                            "punjabi-subtext": [
+                                    "Plus Jakarta Sans"
+                            ],
+                            "body-lg": [
+                                    "Plus Jakarta Sans"
+                            ],
+                            "label-caps": [
+                                    "Plus Jakarta Sans"
+                            ],
+                            "body-md": [
+                                    "Plus Jakarta Sans"
+                            ],
+                            "headline-lg": [
+                                    "Plus Jakarta Sans"
+                            ]
+                    },
+                    "fontSize": {
+                            "headline-sm": [
+                                    "20px",
+                                    {
+                                            "lineHeight": "28px",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "headline-md": [
+                                    "24px",
+                                    {
+                                            "lineHeight": "32px",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "punjabi-subtext": [
+                                    "14px",
+                                    {
+                                            "lineHeight": "20px",
+                                            "fontWeight": "400"
+                                    }
+                            ],
+                            "body-lg": [
+                                    "18px",
+                                    {
+                                            "lineHeight": "26px",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "label-caps": [
+                                    "12px",
+                                    {
+                                            "lineHeight": "16px",
+                                            "letterSpacing": "0.05em",
+                                            "fontWeight": "700"
+                                    }
+                            ],
+                            "body-md": [
+                                    "16px",
+                                    {
+                                            "lineHeight": "24px",
+                                            "fontWeight": "500"
+                                    }
+                            ],
+                            "headline-lg": [
+                                    "30px",
+                                    {
+                                            "lineHeight": "38px",
+                                            "letterSpacing": "-0.02em",
+                                            "fontWeight": "700"
+                                    }
+                            ]
+                    }
+            },
+                },
+        }
+    </script>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-surface text-on-surface font-sans min-h-screen pb-touch-target-min">
+<!-- Sticky Header -->
+<header class="sticky top-0 z-40 bg-surface shadow-sm">
+<div class="px-margin-edge py-stack-md flex items-center justify-between">
+<div class="flex items-center gap-4">
+<button aria-label="Go back" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface">arrow_back</span>
+</button>
+<div>
+<h1 class="text-headline-sm font-headline-sm text-on-surface">Plot #H72</h1>
+<div class="flex items-center gap-1">
+<span class="text-body-md font-body-md text-on-surface-variant">3.6 Acres</span>
+<span class="text-on-surface-variant mx-1">/</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">3.6 ਏਕੜ</span>
+</div>
+</div>
+</div>
+<button aria-label="More options" class="h-10 w-10 flex items-center justify-center rounded-full hover:bg-surface-variant transition-colors">
+<span class="material-symbols-outlined text-on-surface">more_vert</span>
+</button>
+</div>
+</header>
+<!-- Main Content -->
+<main class="px-margin-edge py-stack-lg">
+<!-- Timeline Group -->
+<div class="mb-stack-lg">
+<h2 class="text-label-caps font-label-caps text-primary uppercase mb-stack-md flex items-center gap-2">
+<span>October 2024</span>
+<span class="text-on-surface-variant">/</span>
+<span class="font-punjabi-subtext text-on-surface-variant normal-case">ਅਕਤੂਬਰ 2024</span>
+</h2>
+<div class="space-y-stack-sm relative before:absolute before:inset-y-0 before:left-[27px] before:w-0.5 before:bg-surface-variant">
+<!-- Entry 1 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-4 border-surface bg-primary z-10"></div>
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-between min-h-touch-target-min active:scale-98 transition-transform cursor-pointer">
+<div class="flex items-center gap-4 flex-1">
+<div class="h-10 w-10 rounded-full bg-primary-fixed-dim/20 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+<div>
+<h3 class="text-body-md font-body-md text-on-surface">Irrigation applied</h3>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਸਿੰਚਾਈ ਲਾਗੂ ਕੀਤੀ</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-label-caps font-label-caps text-on-surface-variant">24 OCT</span>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+<!-- Entry 2 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-4 border-surface bg-surface-variant z-10"></div>
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-between min-h-touch-target-min active:scale-98 transition-transform cursor-pointer">
+<div class="flex items-center gap-4 flex-1">
+<div class="h-10 w-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">agriculture</span>
+</div>
+<div>
+<h3 class="text-body-md font-body-md text-on-surface">Land preparation</h3>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਜ਼ਮੀਨ ਦੀ ਤਿਆਰੀ</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-label-caps font-label-caps text-on-surface-variant">15 OCT</span>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+<!-- Timeline Group 2 -->
+<div class="mb-stack-lg">
+<h2 class="text-label-caps font-label-caps text-primary uppercase mb-stack-md flex items-center gap-2">
+<span>September 2024</span>
+<span class="text-on-surface-variant">/</span>
+<span class="font-punjabi-subtext text-on-surface-variant normal-case">ਸਤੰਬਰ 2024</span>
+</h2>
+<div class="space-y-stack-sm relative before:absolute before:inset-y-0 before:left-[27px] before:w-0.5 before:bg-surface-variant">
+<!-- Entry 3 -->
+<div class="relative pl-12">
+<div class="absolute left-4 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-4 border-surface bg-surface-variant z-10"></div>
+<div class="bg-surface-container-lowest rounded-xl p-4 shadow-[0_4px_12px_rgba(0,0,0,0.06)] flex items-center justify-between min-h-touch-target-min active:scale-98 transition-transform cursor-pointer">
+<div class="flex items-center gap-4 flex-1">
+<div class="h-10 w-10 rounded-full bg-surface-variant flex items-center justify-center text-on-surface-variant">
+<span class="material-symbols-outlined">spa</span>
+</div>
+<div>
+<h3 class="text-body-md font-body-md text-on-surface">Seedling check</h3>
+<p class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਪੌਦਿਆਂ ਦੀ ਜਾਂਚ</p>
+</div>
+</div>
+<div class="flex flex-col items-end gap-1">
+<span class="text-label-caps font-label-caps text-on-surface-variant">28 SEP</span>
+<span class="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Floating Action Button -->
+<button class="fixed bottom-[80px] right-margin-edge w-14 h-14 rounded-full bg-primary shadow-lg flex items-center justify-center hover:scale-105 active:scale-95 transition-all z-40 text-on-primary">
+<span class="material-symbols-outlined text-[28px]">add</span>
+</button>
+</body></html>

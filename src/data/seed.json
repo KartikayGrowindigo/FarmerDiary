@@ -1,0 +1,99 @@
+{
+  "farmers": [
+    {
+      "id": "farmer-1",
+      "name": "Manmohan Singh Toor",
+      "fatherName": "Jagwinder Singh",
+      "village": "Sherpur Kalan",
+      "contact": "8847496060",
+      "kisanAdvisor": "Jaswinder Singh",
+      "gender": "male",
+      "gipl_id": "GIPL-001"
+    }
+  ],
+  "plots": [
+    { "id": "de0cbc45", "farmerId": "farmer-1", "acres": 3.6, "village": "Sherpur Kalan" },
+    { "id": "2c558acb", "farmerId": "farmer-1", "acres": 2.6, "village": "Sherpur Kalan" },
+    { "id": "b5790576", "farmerId": "farmer-1", "acres": 5.9, "village": "Sherpur Kalan" },
+    { "id": "5466149c", "farmerId": "farmer-1", "acres": 6.3, "village": "Sherpur Kalan" }
+  ],
+  "cropCycles": [
+    {
+      "id": "cc-de0cbc45-2024",
+      "plotId": "de0cbc45",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2024-25",
+      "sowingDate": "2024-11-10",
+      "harvestDate": "2025-04-01"
+    },
+    {
+      "id": "cc-2c558acb-2024",
+      "plotId": "2c558acb",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2024-25"
+    },
+    {
+      "id": "cc-b5790576-2024",
+      "plotId": "b5790576",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2024-25"
+    },
+    {
+      "id": "cc-5466149c-2024",
+      "plotId": "5466149c",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2024-25"
+    },
+    {
+      "id": "cc-de0cbc45-2025",
+      "plotId": "de0cbc45",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2025-26",
+      "sowingDate": "2025-11-10"
+    },
+    {
+      "id": "cc-2c558acb-2025",
+      "plotId": "2c558acb",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2025-26"
+    },
+    {
+      "id": "cc-b5790576-2025",
+      "plotId": "b5790576",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2025-26"
+    },
+    {
+      "id": "cc-5466149c-2025",
+      "plotId": "5466149c",
+      "crop": "Wheat",
+      "season": "Rabi",
+      "year": "2025-26"
+    }
+  ],
+  "activities": [
+    {
+      "id": "a1",
+      "cropCycleId": "cc-de0cbc45-2024",
+      "module": "Residue Management",
+      "date": "2025-04-02",
+      "notes": "Burned after harvest",
+      "payload": { "method": "Burning", "quantityQtlPerAcre": 10, "fuelLitres": 0, "costINR": 0 }
+    },
+    {
+      "id": "a2",
+      "cropCycleId": "cc-de0cbc45-2024",
+      "module": "Fertilizer & Nutrient Management",
+      "date": "2025-01-10",
+      "notes": "DAP application",
+      "payload": { "product": "DAP", "quantityKgPerAcre": 50, "applicationMethod": "Broadcasting", "costINR": 300 }
+    }
+  ]
+}

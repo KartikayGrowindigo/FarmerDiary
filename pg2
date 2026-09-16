@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Activity Picker</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "secondary": "#904d00",
+                        "on-secondary": "#ffffff",
+                        "surface-tint": "#166965",
+                        "primary-container": "#1f6f6b",
+                        "on-primary-fixed": "#00201e",
+                        "background": "#fcf9f8",
+                        "surface-container-highest": "#e4e2e1",
+                        "on-tertiary-fixed-variant": "#474744",
+                        "on-error": "#ffffff",
+                        "secondary-container": "#fe932c",
+                        "inverse-on-surface": "#f3f0f0",
+                        "error-container": "#ffdad6",
+                        "on-secondary-fixed-variant": "#6e3900",
+                        "on-primary-container": "#a5efe9",
+                        "surface-bright": "#fcf9f8",
+                        "on-secondary-fixed": "#2f1500",
+                        "secondary-fixed-dim": "#ffb77d",
+                        "on-tertiary-fixed": "#1b1c1a",
+                        "primary-fixed": "#a6f0ea",
+                        "tertiary-fixed-dim": "#c8c6c3",
+                        "secondary-fixed": "#ffdcc3",
+                        "on-primary-fixed-variant": "#00504d",
+                        "on-primary": "#ffffff",
+                        "primary": "#005652",
+                        "on-surface-variant": "#3f4948",
+                        "primary-fixed-dim": "#8ad3ce",
+                        "on-background": "#1b1c1c",
+                        "on-tertiary-container": "#e3e1dd",
+                        "tertiary-fixed": "#e4e2de",
+                        "error": "#ba1a1a",
+                        "surface-container": "#f0eded",
+                        "on-surface": "#1b1c1c",
+                        "on-secondary-container": "#663500",
+                        "outline-variant": "#bec9c7",
+                        "surface-container-high": "#eae7e7",
+                        "tertiary-container": "#646461",
+                        "tertiary": "#4c4c4a",
+                        "surface-dim": "#dcd9d9",
+                        "surface": "#fcf9f8",
+                        "surface-container-low": "#f6f3f2",
+                        "on-error-container": "#93000a",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-variant": "#e4e2e1",
+                        "inverse-primary": "#8ad3ce",
+                        "on-tertiary": "#ffffff",
+                        "outline": "#6f7978",
+                        "inverse-surface": "#303030"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "2xl": "16px",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "stack-sm": "8px",
+                        "touch-target-min": "56px",
+                        "stack-md": "16px",
+                        "stack-lg": "24px",
+                        "gutter": "16px",
+                        "margin-edge": "20px"
+                    },
+                    "fontFamily": {
+                        "headline-sm": ["Plus Jakarta Sans"],
+                        "headline-md": ["Plus Jakarta Sans"],
+                        "body-md": ["Plus Jakarta Sans"],
+                        "punjabi-subtext": ["Plus Jakarta Sans"],
+                        "headline-lg": ["Plus Jakarta Sans"],
+                        "label-caps": ["Plus Jakarta Sans"],
+                        "body-lg": ["Plus Jakarta Sans"]
+                    },
+                    "fontSize": {
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "700" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "500" }],
+                        "punjabi-subtext": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-lg": ["30px", { "lineHeight": "38px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "label-caps": ["12px", { "lineHeight": "16px", "letterSpacing": "0.05em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "26px", "fontWeight": "500" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 48;
+        }
+        .soft-shadow {
+            box-shadow: 0 4px 12px rgba(0,0,0,0.06);
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-background min-h-screen pb-24 font-body-md antialiased flex flex-col">
+<!-- Top Bar (Transactional) -->
+<header class="flex items-center justify-between w-full px-margin-edge py-stack-md bg-surface shadow-sm sticky top-0 z-40">
+<button aria-label="Go back" class="h-touch-target-min w-touch-target-min flex items-center justify-center rounded-full hover:bg-surface-container-high transition-colors -ml-4">
+<span class="material-symbols-outlined text-on-surface text-2xl" data-icon="arrow_back">arrow_back</span>
+</button>
+<h1 class="text-headline-sm font-headline-sm text-primary flex-1 text-center pr-touch-target-min">Select Activity</h1>
+</header>
+<!-- Main Content Canvas -->
+<main class="flex-1 px-margin-edge py-stack-lg">
+<div class="grid grid-cols-2 gap-margin-edge">
+<!-- Tile 1 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="agriculture">agriculture</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Land Preparation</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਭੋਂ ਤਿਆਰੀ</span>
+</button>
+<!-- Tile 2 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="spa">spa</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Seed &amp; Sowing</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਬੀਜ ਅਤੇ ਬਿਜਾਈ</span>
+</button>
+<!-- Tile 3 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="science">science</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Fertilizer</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਖਾਦ</span>
+</button>
+<!-- Tile 4 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="bug_report">bug_report</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Pest &amp; Disease</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਕੀੜੇ ਅਤੇ ਬਿਮਾਰੀਆਂ</span>
+</button>
+<!-- Tile 5 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="water_drop">water_drop</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Water</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਪਾਣੀ</span>
+</button>
+<!-- Tile 6 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="eco">eco</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Harvest</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਵਾਢੀ</span>
+</button>
+<!-- Tile 7 -->
+<button class="bg-surface-container-lowest rounded-2xl p-5 soft-shadow flex flex-col items-center justify-center text-center aspect-square scale-100 active:scale-95 transition-transform duration-150 group col-span-2 max-w-[200px] mx-auto w-full">
+<span class="material-symbols-outlined text-4xl text-primary-container mb-stack-sm group-hover:scale-110 transition-transform" data-icon="recycling">recycling</span>
+<span class="text-body-md font-body-md text-on-surface font-bold leading-tight mb-1">Residue</span>
+<span class="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਪਰਾਲੀ/ਰਹਿਤ-ਖੂਹੰਦ</span>
+</button>
+</div>
+</main>
+<!-- Bottom Navigation Shell -->
+<nav class="fixed bottom-0 w-full z-50 flex justify-around items-center h-touch-target-min px-margin-edge pb-2 bg-surface-container-lowest shadow-[0_-4px_12px_rgba(0,0,0,0.06)] rounded-t-xl md:hidden">
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 w-16 h-full rounded-lg">
+<span class="material-symbols-outlined text-[24px]" data-icon="home">home</span>
+<span class="text-label-caps font-label-caps mt-1">Home</span>
+</button>
+<!-- Active Tab: Add -->
+<button class="flex flex-col items-center justify-center text-primary font-bold scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 w-16 h-full rounded-lg relative">
+<div class="absolute -top-1 w-12 h-1 bg-primary rounded-b-full"></div>
+<span class="material-symbols-outlined text-[24px]" data-icon="add_circle" data-weight="fill" style="font-variation-settings: 'FILL' 1;">add_circle</span>
+<span class="text-label-caps font-label-caps mt-1">Add</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 w-16 h-full rounded-lg">
+<span class="material-symbols-outlined text-[24px]" data-icon="leaderboard">leaderboard</span>
+<span class="text-label-caps font-label-caps mt-1">Impact</span>
+</button>
+<button class="flex flex-col items-center justify-center text-on-surface-variant scale-98 active:scale-95 transition-all duration-200 hover:bg-primary-fixed-dim/20 w-16 h-full rounded-lg">
+<span class="material-symbols-outlined text-[24px]" data-icon="person">person</span>
+<span class="text-label-caps font-label-caps mt-1">Profile</span>
+</button>
+</nav>
+</body></html>
