@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import HomeScreen from './components/HomeScreen'
 import PlotDetailScreen from './components/PlotDetailScreen'
 import ActivityPicker from './components/ActivityPicker'
@@ -6,6 +6,7 @@ import ActivityForm from './components/ActivityForm'
 import ImpactScreen from './components/ImpactScreen'
 import ProfileScreen from './components/ProfileScreen'
 import BottomNav, { NavKey } from './components/BottomNav'
+import { Backdrop } from './components/ui'
 import store from './lib/store'
 import { Activity } from './types'
 import { ModuleKey } from './config/modules'
@@ -22,6 +23,8 @@ type Screen =
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
+
+  useEffect(() => { window.scrollTo(0, 0) }, [screen])
 
   const activeNav: NavKey =
     screen.name === 'impact' ? 'impact' :
@@ -63,7 +66,9 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen">
+    <div className="min-h-screen relative isolate">
+      <Backdrop />
+      <div key={screen.name + ('plotId' in screen ? screen.plotId : '')} className="anim-screen">
       {screen.name === 'home' && <HomeScreen onOpenPlot={plotId => setScreen({ name: 'plot', plotId })} />}
 
       {screen.name === 'plot' && (
@@ -92,6 +97,7 @@ export default function App() {
 
       {screen.name === 'impact' && <ImpactScreen />}
       {screen.name === 'profile' && <ProfileScreen />}
+      </div>
 
       {showBottomNav && <BottomNav active={activeNav} onNavigate={handleNav} />}
     </div>
