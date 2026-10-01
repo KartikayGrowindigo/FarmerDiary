@@ -9,8 +9,8 @@ const clientId = import.meta.env.VITE_AZURE_CLIENT_ID as string | undefined
 const tenant = (import.meta.env.VITE_AZURE_TENANT_ID as string | undefined) || ALLOWED_DOMAIN
 
 export const authConfigured = !!clientId
-// Lets the app run locally before an Entra app is registered. Never available in production builds.
-export const devBypassAvailable = !authConfigured && import.meta.env.DEV
+// Temporary: lets anyone in until an Entra app is registered. Disappears once VITE_AZURE_CLIENT_ID is set.
+export const devBypassAvailable = !authConfigured
 
 const msal = authConfigured
   ? new PublicClientApplication({

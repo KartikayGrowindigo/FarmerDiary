@@ -14,7 +14,7 @@ Sign-in (Microsoft, @growindigo.co.in only)
 - Register an app in the Grow Indigo Entra tenant: platform "Single-page application", redirect URIs `http://localhost:5173` and the deployed URL. No secret is needed.
 - Copy `.env.example` to `.env` and set `VITE_AZURE_CLIENT_ID` (and `VITE_AZURE_TENANT_ID` if you want the tenant GUID).
 - The authority is the Grow Indigo tenant, and any account whose email is not `@growindigo.co.in` (e.g. B2B guests) is rejected.
-- Without a client ID, `npm run dev` shows a "Continue in dev mode" button. Production builds never show it.
+- Until a client ID is set, the login page (local and on Vercel) shows a "Continue in dev mode" button that skips sign-in. It disappears as soon as `VITE_AZURE_CLIENT_ID` is set.
 - This is a client-side gate. Once data moves to a backend, the backend must validate the Microsoft ID token too.
 
 FAT survey (Regen Ag 5.1)
