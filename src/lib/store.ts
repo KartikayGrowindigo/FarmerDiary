@@ -1,5 +1,5 @@
 import seed from '../data/seed.json'
-import { Farmer, Plot, CropCycle, Activity } from '../types'
+import { Farmer, Plot, CropCycle, Activity, SurveyResponse } from '../types'
 
 const LS_KEY = 'clearharvest:v1'
 
@@ -8,16 +8,22 @@ type DB = {
   plots: Plot[]
   cropCycles: CropCycle[]
   activities: Activity[]
+  surveys: Record<string, SurveyResponse>
 }
 
 function load(): DB {
   const raw = localStorage.getItem(LS_KEY)
-  if (raw) return JSON.parse(raw)
+  if (raw) {
+    const db = JSON.parse(raw)
+    db.surveys = db.surveys || {}
+    return db
+  }
   const initial: DB = {
     farmers: seed.farmers,
     plots: seed.plots,
     cropCycles: seed.cropCycles,
-    activities: seed.activities || []
+    activities: seed.activities || [],
+    surveys: {}
   }
   localStorage.setItem(LS_KEY, JSON.stringify(initial))
   return initial
@@ -59,6 +65,16 @@ export const store = {
       const copy: Activity = { ...baseActivity, id: baseActivity.id + '-' + ccId, cropCycleId: ccId }
       db.activities.push(copy)
     })
+    save(db)
+  },
+  getSurvey(farmerId: string): SurveyResponse | undefined {
+    return load().surveys[farmerId]
+  },
+  saveSurvey(farmerId: string, answers: Record<string, any>) {
+    const db = load()
+    const prev = db.surveys[farmerId]
+    const now = new Date().toISOString()
+    db.surveys[farmerId] = { farmerId, answers, createdAt: prev?.createdAt || now, updatedAt: now }
     save(db)
   }
 }

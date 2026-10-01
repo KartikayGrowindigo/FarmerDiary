@@ -441,7 +441,7 @@ export function Logo({ className }: ArtProps) {
   )
 }
 
-/* ---------- Animated field landscape used behind screen headers ---------- */
+/* ---------- Field landscape used behind screen headers ---------- */
 
 function Cloud({ x, y, s = 1 }: { x: number; y: number; s?: number }) {
   return (
@@ -458,7 +458,7 @@ function Stalks({ x, flip = false }: { x: number; flip?: boolean }) {
   return (
     <g transform={`translate(${x} 0) ${flip ? 'scale(-1 1)' : ''}`}>
       {offsets.map((o, i) => (
-        <g key={o} className="anim-sway" style={{ animationDelay: `${i * -0.7}s` }}>
+        <g key={o}>
           <path d={`M${o} 200 Q${o + 3} ${176 - i * 4} ${o + 5} ${150 + i * 6}`} stroke="#B7791F" strokeWidth={2} fill="none" />
           <WheatHead x={o + 5} y={140 + i * 6} s={1.5} light="#F8D35E" dark="#D69A1C" />
         </g>

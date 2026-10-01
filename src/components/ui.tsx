@@ -1,5 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import { FieldScene } from './art'
+import store from '../lib/store'
+import { surveyProgress } from '../config/fatSurvey'
 
 // Landscape hero used at the top of each screen; content cards overlap its lower edge.
 export function SceneHeader({
@@ -84,3 +86,35 @@ export function useCountUp(target: number, duration = 1100) {
 }
 
 export const stagger = (i: number, base = 0.06) => ({ animationDelay: `${0.1 + i * base}s` })
+
+// Entry point to the FAT survey with live progress for the current farmer.
+export function SurveyCard({ onClick, style }: { onClick: () => void; style?: React.CSSProperties }) {
+  const farmer = store.getFarmers()[0]
+  const { asked, done } = surveyProgress(store.getSurvey(farmer.id)?.answers || {})
+  const started = done > 0
+  const pct = asked ? Math.round((done / asked) * 100) : 0
+  return (
+    <button
+      onClick={onClick}
+      style={style}
+      className="card anim-fade-up w-full p-4 text-left flex items-center gap-4 active:scale-[0.98] hover:-translate-y-0.5 transition-transform duration-200"
+    >
+      <span className="w-14 h-14 rounded-2xl bg-gradient-to-br from-violet-600 to-fuchsia-400 text-white flex items-center justify-center shrink-0 shadow-md">
+        <span className="material-symbols-outlined text-[30px]">assignment</span>
+      </span>
+      <span className="flex-1 min-w-0">
+        <span className="block text-label-caps font-label-caps text-violet-700 tracking-widest">REGEN AG 5.1</span>
+        <span className="block text-body-lg font-extrabold text-on-surface">FAT Survey</span>
+        <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">
+          {started ? `${done}/${asked} answered` : 'Farm assessment · ਖੇਤ ਸਰਵੇਖਣ'}
+        </span>
+        {started && (
+          <span className="block mt-2 h-1.5 rounded-full bg-violet-100 overflow-hidden">
+            <span className="block h-full bg-gradient-to-r from-violet-600 to-fuchsia-400 rounded-full" style={{ width: `${pct}%` }} />
+          </span>
+        )}
+      </span>
+      <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+    </button>
+  )
+}

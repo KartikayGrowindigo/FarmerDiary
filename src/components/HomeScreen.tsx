@@ -2,13 +2,13 @@ import React from 'react'
 import store from '../lib/store'
 import { MODULES } from '../config/modules'
 import { Logo, PlotArt } from './art'
-import { SceneHeader, Initials, stagger } from './ui'
+import { SceneHeader, Initials, SurveyCard, stagger } from './ui'
 
 const TOTAL_MODULES = MODULES.length
 const RADIUS = 40
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 
-export default function HomeScreen({ onOpenPlot }: { onOpenPlot: (plotId: string) => void }) {
+export default function HomeScreen({ onOpenPlot, onOpenSurvey }: { onOpenPlot: (plotId: string) => void; onOpenSurvey: () => void }) {
   const farmer = store.getFarmers()[0]
   const plots = store.getPlots().filter(p => p.farmerId === farmer.id)
   const cycle = store.getCurrentCropCycle(plots[0]?.id)
@@ -89,6 +89,7 @@ export default function HomeScreen({ onOpenPlot }: { onOpenPlot: (plotId: string
             </button>
           )
         })}
+        <SurveyCard onClick={onOpenSurvey} style={stagger(plots.length, 0.08)} />
       </main>
     </div>
   )

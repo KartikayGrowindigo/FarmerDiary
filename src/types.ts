@@ -36,3 +36,10 @@ export type Activity = {
   notes?: string
   payload: Record<string, any>
 }
+
+export type SurveyResponse = {
+  farmerId: ID
+  answers: Record<string, any>
+  createdAt: string
+  updatedAt: string
+}

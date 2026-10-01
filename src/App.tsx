@@ -5,6 +5,7 @@ import ActivityPicker from './components/ActivityPicker'
 import ActivityForm from './components/ActivityForm'
 import ImpactScreen from './components/ImpactScreen'
 import ProfileScreen from './components/ProfileScreen'
+import SurveyScreen from './components/SurveyScreen'
 import BottomNav, { NavKey } from './components/BottomNav'
 import { Backdrop } from './components/ui'
 import store from './lib/store'
@@ -20,6 +21,7 @@ type Screen =
   | { name: 'form'; plotId: string | null; moduleKey: ModuleKey }
   | { name: 'impact' }
   | { name: 'profile' }
+  | { name: 'survey'; from: 'home' | 'profile' }
 
 export default function App() {
   const [screen, setScreen] = useState<Screen>({ name: 'home' })
@@ -69,7 +71,12 @@ export default function App() {
     <div className="min-h-screen relative isolate">
       <Backdrop />
       <div key={screen.name + ('plotId' in screen ? screen.plotId : '')} className="anim-screen">
-      {screen.name === 'home' && <HomeScreen onOpenPlot={plotId => setScreen({ name: 'plot', plotId })} />}
+      {screen.name === 'home' && (
+        <HomeScreen
+          onOpenPlot={plotId => setScreen({ name: 'plot', plotId })}
+          onOpenSurvey={() => setScreen({ name: 'survey', from: 'home' })}
+        />
+      )}
 
       {screen.name === 'plot' && (
         <PlotDetailScreen
@@ -96,7 +103,8 @@ export default function App() {
       )}
 
       {screen.name === 'impact' && <ImpactScreen />}
-      {screen.name === 'profile' && <ProfileScreen />}
+      {screen.name === 'profile' && <ProfileScreen onOpenSurvey={() => setScreen({ name: 'survey', from: 'profile' })} />}
+      {screen.name === 'survey' && <SurveyScreen onBack={() => setScreen(screen.from === 'home' ? { name: 'home' } : { name: 'profile' })} />}
       </div>
 
       {showBottomNav && <BottomNav active={activeNav} onNavigate={handleNav} />}

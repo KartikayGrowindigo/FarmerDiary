@@ -1,9 +1,11 @@
 import React from 'react'
 import store from '../lib/store'
 import { PlotArt } from './art'
-import { SceneHeader, Initials, stagger } from './ui'
+import { SceneHeader, Initials, SurveyCard, stagger } from './ui'
+import { useAuth } from '../lib/auth'
 
-export default function ProfileScreen() {
+export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => void }) {
+  const { user, signOut } = useAuth()
   const farmer = store.getFarmers()[0]
   const plots = store.getPlots().filter(p => p.farmerId === farmer.id)
   const totalAcres = plots.reduce((s, p) => s + p.acres, 0)
@@ -51,6 +53,23 @@ export default function ProfileScreen() {
             </div>
           ))}
         </div>
+
+        <SurveyCard onClick={onOpenSurvey} style={stagger(rows.length + 2)} />
+
+        {user && (
+          <div className="card anim-fade-up p-4 flex items-center gap-3" style={stagger(rows.length + 3)}>
+            <span className="w-10 h-10 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center shrink-0">
+              <span className="material-symbols-outlined text-[22px]">account_circle</span>
+            </span>
+            <div className="flex-1 min-w-0">
+              <span className="block text-body-md font-bold text-on-surface truncate">{user.name || user.email}</span>
+              <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant truncate">{user.email}</span>
+            </div>
+            <button onClick={signOut} className="h-10 px-4 rounded-full bg-rose-50 text-rose-700 font-bold text-body-md active:scale-95 transition-transform">
+              Sign out
+            </button>
+          </div>
+        )}
       </main>
     </div>
   )
