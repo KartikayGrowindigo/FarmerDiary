@@ -1,5 +1,6 @@
 // FAT (Regen Ag 5.1) annual crop survey, mirrored from
-// "Wheat Punjab - Regen AG5.1 Annual Crop Import Data.xlsx".
+// "Wheat Punjab - Regen AG5.1 Annual Crop Import Data.xlsx" and extended with the answer
+// choices seen in "Rice Nizamabad - Regen AG5.1 Annual Crop Import Data 1.xlsx".
 // `column` is the exact header in the import sheet so answers can be exported 1:1.
 // Back-office columns (UIDs, versions, approval status, rules) are not asked here.
 
@@ -40,6 +41,7 @@ export type SurveySection = {
 const YES_NO = ['Yes', 'No']
 // Answer scales as they appear in the import sheet. Confirm against the official FAT template.
 const PCT = ['0-10%', '11-30%', '31-50%', '51-70%', '71-90%', '91-100%']
+const PCT_HABITAT = ['0', '1-4%', '5-9%', '10-19%', '20% or more']
 const PCT_PEST = ['0-5%', '6-30%', '31-70%', '71-100%']
 const PRINCIPLES_4 = ['None', '1 principle', '2 principles', '3 principles', '4 principles']
 const PRINCIPLES_5 = [...PRINCIPLES_4, '5 principles']
@@ -146,7 +148,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
         }
       },
       { id: 'q1_11', sheet: R, column: 'Soil - 1.11 Do you burn crop residue in more than 10% of your field?', label: '1.11 Do you burn crop residue on more than 10% of your field?', type: 'choice', options: YES_NO },
-      { id: 'q1_12', sheet: R, column: 'Soil - 1.12 On average, what is the interval of soil analysis for texture, pH, soil organic matter, phosphorus, potassium (excluding nitrogen)?', label: '1.12 How often is soil analysed, on average?', help: 'Texture, pH, SOM, P, K (not N).', type: 'number', unit: 'years', min: 0 },
+      { id: 'q1_12', sheet: R, column: 'Soil - 1.12 On average, what is the interval of soil analysis for texture, pH, soil organic matter, phosphorus, potassium (excluding nitrogen)?', label: '1.12 How often is soil analysed, on average?', help: 'Texture, pH, SOM, P, K (not N).', type: 'choice', options: ['No Analysis', '1 year', '2 years', '3 years', '5 years', 'More than 5 years'] },
       { id: 'q1_13', sheet: R, column: 'Soil - FAT V4 Fertilizer Productivity 113 ', label: '1.13 Fertilizer productivity (FAT V4)', help: 'As calculated by the field team.', type: 'number', min: 0, step: 0.01 },
       { id: 'q1_14', sheet: R, column: 'Soil - 1.14 Has the SOM increased since the last soil analysis?', label: '1.14 Has soil organic matter increased since the last analysis?', type: 'choice', options: YES_NO }
     ]
@@ -161,7 +163,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
       { id: 'q2_01', sheet: R, column: 'Biodiversity and Land use - 2.01 Do you follow Integrated Pest Management (IPM) principles when applying plant protection products? If partially yes, how many of the following principles do you apply: (a) Appropriate pest and disease monitoring, (b) Appropriate intervention measures, (c) Appropriate quantity/dose, (d) Appropriate time, (e) Appropriate place', label: '2.01 How many IPM principles do you follow?', help: 'Monitoring, intervention measures, right dose, right time, right place.', type: 'choice', options: PRINCIPLES_5 },
       { id: 'q2_02', sheet: R, column: 'Biodiversity and Land use - 2.02 What is the percentage of crop land without synthetic pest and disease control (land without synthetic pest control/ total crop land x 100)', label: '2.02 What % of crop land has no synthetic pest & disease control?', type: 'choice', options: PCT_PEST },
       { id: 'q2_03', sheet: R, column: 'Biodiversity and Land use - 2.03 What is the percentage of crop and pasture land without synthetic herbicide application? (land without synthetic herbicide control/ total crop land x 100)', label: '2.03 What % of crop & pasture land has no synthetic herbicide?', type: 'choice', options: PCT_PEST },
-      { id: 'q2_04', sheet: R, column: 'Biodiversity and Land use - 2.04 What is the percentage of agricultural area being biodiversity habitats such as hedge, trees alley, flower strip, natural habitats, green belts, riparian area, non farmed area (that could potentially be cultivated) etc? (agriculture area with biodiversity habitat / total crop land x 100)', label: '2.04 What % of the farm is biodiversity habitat?', help: 'Hedges, tree alleys, flower strips, green belts, riparian or non-farmed area.', type: 'number', unit: '%', min: 0, max: 100 },
+      { id: 'q2_04', sheet: R, column: 'Biodiversity and Land use - 2.04 What is the percentage of agricultural area being biodiversity habitats such as hedge, trees alley, flower strip, natural habitats, green belts, riparian area, non farmed area (that could potentially be cultivated) etc? (agriculture area with biodiversity habitat / total crop land x 100)', label: '2.04 What % of the farm is biodiversity habitat?', help: 'Hedges, tree alleys, flower strips, green belts, riparian or non-farmed area.', type: 'choice', options: PCT_HABITAT },
       { id: 'q2_05', sheet: R, column: 'Biodiversity and Land use - 2.05 What is the percentage of agriculture area dedicated to agroforestry (productive areas in a field with combinations of crops or pasture with multiple types of productive bushes & trees)? (agriculture area with agroforestery/total agriculture area x 100)', label: '2.05 What % of the farm is under agroforestry?', type: 'number', unit: '%', min: 0, max: 100 },
       { id: 'q2_06', sheet: R, column: 'Biodiversity and Land use - 2.06 Do you have a recorded and tracked Biodiversity action plan in place at farm scale?', label: '2.06 Do you have a recorded biodiversity action plan?', type: 'choice', options: YES_NO }
     ]
@@ -173,7 +175,7 @@ export const SURVEY_SECTIONS: SurveySection[] = [
     icon: 'water_drop',
     tone: { from: '#0369A1', to: '#38BDF8', tint: '#E0F2FE', ink: '#075985' },
     questions: [
-      { id: 'q3_01a', sheet: R, column: 'Water - 3.01a If you have to irrigate, select the predominant irrigation system used on irrigated crop', label: '3.01a Main irrigation system', type: 'choice', options: ['Surface (Flooding, Furrow, Border etc.)', 'Sprinkler', 'Drip', 'No irrigation'] },
+      { id: 'q3_01a', sheet: R, column: 'Water - 3.01a If you have to irrigate, select the predominant irrigation system used on irrigated crop', label: '3.01a Main irrigation system', type: 'choice', options: ['Surface (Flooding, Furrow, Border etc.)', 'Alternate Wetting and Drying (AWD) all season', 'Sprinkler', 'Drip', 'No irrigation'] },
       { id: 'q3_02', sheet: R, column: 'Water - 3.02 Do you monitor the water consumption at crop level and is data recording available?', label: '3.02 Do you monitor and record water use per crop?', type: 'choice', options: YES_NO },
       { id: 'q3_03', sheet: R, column: 'Water - 3.03 Do you control irrigation with digital soil moisture sensors?', label: '3.03 Do you use digital soil moisture sensors?', type: 'choice', options: YES_NO },
       { id: 'q3_04', sheet: R, column: 'Water - 3.04 If you have water bodies at your farm (eg. rivers, ponds, lakes), what is the minimum distance between field application area (fertilizer/manure and pesticide) and the water body?', label: '3.04 Distance from sprayed/fertilised area to the nearest water body', help: 'Rivers, ponds, lakes on the farm.', type: 'choice', options: ['Less than 5 m', '5-10 m', 'More than 10 m', 'NA'] },
