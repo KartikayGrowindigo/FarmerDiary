@@ -88,6 +88,7 @@ export default function App() {
 
       {screen.name === 'picker' && (
         <ActivityPicker
+          plotId={screen.plotId}
           onBack={() => setScreen(screen.plotId ? { name: 'plot', plotId: screen.plotId } : { name: 'home' })}
           onSelect={moduleKey => setScreen({ name: 'form', plotId: screen.plotId, moduleKey })}
         />
