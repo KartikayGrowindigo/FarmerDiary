@@ -391,13 +391,29 @@ export const ExtraArt = {
   )
 }
 
+// CFT questionnaire answers that share an illustration with the diary's original options.
+const OPTION_ALIAS: Record<string, string> = {
+  'Conventional (CT)': 'Conventional Tillage',
+  'Zero tillage (ZT)': 'Zero Till Drill',
+  'Zero-till drill': 'Zero Till Drill',
+  'Happy seeder': 'Happy Seeder',
+  'Super seeder': 'Super Seeder',
+  'Smart seeder': 'Smart Seeder',
+  Broadcast: 'Broadcasting',
+  'Drilled with seed (basal)': 'Seeder',
+  'Foliar spray': 'Spray',
+  Burnt: 'Burning',
+  'Incorporated into soil': 'Incorporation',
+  'Removed from field (baled / sold / fodder)': 'Baling & Selling'
+}
+
 export function OptionArt({ value, className }: { value: string } & ArtProps) {
-  const Art = OPTION_ART[value]
+  const Art = OPTION_ART[OPTION_ALIAS[value] ?? value]
   return Art ? <Art className={className} /> : null
 }
 
 export function hasOptionArt(value: string) {
-  return value in OPTION_ART
+  return (OPTION_ALIAS[value] ?? value) in OPTION_ART
 }
 
 /* ---------- Plot tile: a small field landscape ---------- */

@@ -1,144 +1,101 @@
 import { ModuleKey } from './modules'
+import { Answers, Question, findQuestion } from './fatSurvey'
 
-export type FieldType = 'chips' | 'grid' | 'number' | 'stepper' | 'text' | 'toggle' | 'select'
+// Each diary activity asks the CFT questionnaire's own questions (same ids, answer lists, units and
+// show/hide rules), so an entry feeds the survey directly. The entry's date stands in for the
+// questionnaire's date questions (F01, G03, I02, J08).
 
-export type FieldOption = { value: string; label: string; labelPa?: string; icon?: string }
+function q(id: string): Question {
+  const found = findQuestion(id)
+  if (!found) throw new Error(`Unknown CFT question ${id}`)
+  return found
+}
+const when = (cond: (v: Answers) => boolean, base: Question): Question => ({ ...base, showIf: v => cond(v) && (!base.showIf || base.showIf(v)) })
+// Area questions default to the plot's area.
+const plotArea = (base: Question): Question => ({ ...base, derive: v => v.B04 })
 
-export type FieldSpec = {
-  key: string
-  label: string
-  labelPa: string
-  type: FieldType
-  unitLabel?: string
-  options?: FieldOption[]
-  default?: any
-  min?: number
-  max?: number
-  step?: number
+const COST: Question = {
+  id: 'totalCostPerAcre', label: 'Cost of this work', help: 'For your diary only – not part of the CFT survey.',
+  type: 'number', unit: '₹ per acre', min: 0, optional: true
 }
 
-export const MODULE_FIELDS: Record<ModuleKey, FieldSpec[]> = {
-  'Land Preparation & Sowing': [
-    {
-      key: 'prepMethod', label: 'Method', labelPa: 'ਢੰਗ', type: 'grid', default: 'Conventional Tillage',
-      options: [
-        { value: 'Conventional Tillage', label: 'Conventional', icon: 'agriculture' },
-        { value: 'Happy Seeder', label: 'Happy Seeder', icon: 'grass' },
-        { value: 'Super Seeder', label: 'Super Seeder', icon: 'compost' },
-        { value: 'Smart Seeder', label: 'Smart Seeder', icon: 'psychology' },
-        { value: 'Zero Till Drill', label: 'Zero Till', icon: 'eco' }
-      ]
-    },
-    { key: 'equipment', label: 'Equipment used', labelPa: 'ਸੰਦ', type: 'text' },
-    { key: 'hoursPerAcre', label: 'Hours per acre', labelPa: 'ਘੰਟੇ/ਏਕੜ', type: 'number', unitLabel: 'hrs/acre', default: 0, min: 0, step: 0.5 },
-    { key: 'fuelLitres', label: 'Diesel used', labelPa: 'ਡੀਜ਼ਲ', type: 'number', unitLabel: 'litres', default: 0, min: 0 },
-    { key: 'totalCostPerAcre', label: 'Total cost', labelPa: 'ਕੁੱਲ ਖਰਚਾ', type: 'number', unitLabel: '₹/acre', default: 0, min: 0 }
-  ],
-  'Seed & Sowing': [
-    {
-      key: 'variety', label: 'Variety', labelPa: 'ਕਿਸਮ', type: 'chips', default: 'HD-2967',
-      options: [
-        { value: 'HD-2967', label: 'HD-2967' },
-        { value: 'PBW-725', label: 'PBW-725' },
-        { value: 'WH-1105', label: 'WH-1105' },
-        { value: 'Other', label: 'Other' }
-      ]
-    },
-    { key: 'seedRateKgPerAcre', label: 'Seed rate', labelPa: 'ਬੀਜ ਦੀ ਦਰ', type: 'stepper', unitLabel: 'kg/acre', default: 45, min: 0 },
-    { key: 'seedTreatmentDone', label: 'Seed treatment done', labelPa: 'ਬੀਜ ਸੋਧ ਕੀਤੀ', type: 'toggle', default: false },
-    { key: 'treatmentProduct', label: 'Treatment product', labelPa: 'ਸੋਧ ਉਤਪਾਦ', type: 'text' }
-  ],
-  'Fertilizer & Nutrient Management': [
-    {
-      key: 'product', label: 'Product', labelPa: 'ਉਤਪਾਦ', type: 'chips', default: 'DAP',
-      options: [
-        { value: 'DAP', label: 'DAP' },
-        { value: 'Urea', label: 'Urea' },
-        { value: 'MOP', label: 'MOP' },
-        { value: 'Zinc', label: 'Zinc' },
-        { value: 'Bio', label: 'Bio' }
-      ]
-    },
-    { key: 'quantityKgPerAcre', label: 'Quantity', labelPa: 'ਮਾਤਰਾ', type: 'stepper', unitLabel: 'kg/acre', default: 50, min: 0 },
-    {
-      key: 'applicationMethod', label: 'Method', labelPa: 'ਢੰਗ', type: 'grid', default: 'Broadcasting',
-      options: [
-        { value: 'Broadcasting', label: 'Broadcast', icon: 'scatter_plot' },
-        { value: 'Seeder', label: 'Seeder', icon: 'agriculture' },
-        { value: 'Fertigation', label: 'Fertigation', icon: 'water_drop' },
-        { value: 'Spray', label: 'Spray', icon: 'cloud_download' },
-        { value: 'Drenching', label: 'Drenching', icon: 'opacity' }
-      ]
-    },
-    { key: 'costINR', label: 'Cost', labelPa: 'ਖਰਚਾ', type: 'number', unitLabel: '₹', default: 0, min: 0 },
-    { key: 'otherCostINR', label: 'Other cost', labelPa: 'ਹੋਰ ਖਰਚਾ', type: 'number', unitLabel: '₹', default: 0, min: 0 }
-  ],
-  'Pest & Disease Management': [
-    {
-      key: 'cppType', label: 'Type', labelPa: 'ਕਿਸਮ', type: 'chips', default: 'Insecticide',
-      options: [
-        { value: 'Insecticide', label: 'Insecticide' },
-        { value: 'Fungicide', label: 'Fungicide' },
-        { value: 'Herbicide', label: 'Herbicide' },
-        { value: 'Other', label: 'Other' }
-      ]
-    },
-    { key: 'tradeName', label: 'Trade name', labelPa: 'ਵਪਾਰਕ ਨਾਮ', type: 'text' },
-    { key: 'targetPest', label: 'Target pest/disease', labelPa: 'ਨਿਸ਼ਾਨਾ ਕੀੜਾ/ਬਿਮਾਰੀ', type: 'text' },
-    { key: 'quantityPerAcre', label: 'Quantity per acre', labelPa: 'ਮਾਤਰਾ/ਏਕੜ', type: 'number', default: 0, min: 0 },
-    {
-      key: 'unit', label: 'Unit', labelPa: 'ਇਕਾਈ', type: 'chips', default: 'ml',
-      options: [
-        { value: 'ml', label: 'ml' },
-        { value: 'gm', label: 'gm' },
-        { value: 'L', label: 'L' },
-        { value: 'kg', label: 'kg' }
-      ]
-    },
-    { key: 'fuelLitres', label: 'Diesel used', labelPa: 'ਡੀਜ਼ਲ', type: 'number', unitLabel: 'litres', default: 0, min: 0 },
-    { key: 'costINR', label: 'Cost', labelPa: 'ਖਰਚਾ', type: 'number', unitLabel: '₹', default: 0, min: 0 }
-  ],
-  'Water Management': [
-    {
-      key: 'irrigationMethod', label: 'Method', labelPa: 'ਢੰਗ', type: 'grid', default: 'Flood',
-      options: [
-        { value: 'Flood', label: 'Flood', icon: 'water' },
-        { value: 'Sprinkler', label: 'Sprinkler', icon: 'water_drop' },
-        { value: 'Drip', label: 'Drip', icon: 'opacity' }
-      ]
-    },
-    {
-      key: 'waterSource', label: 'Source', labelPa: 'ਸਰੋਤ', type: 'chips', default: 'Tubewell',
-      options: [
-        { value: 'Tubewell', label: 'Tubewell' },
-        { value: 'Canal', label: 'Canal' },
-        { value: 'Rain', label: 'Rain' }
-      ]
-    },
-    { key: 'groundwaterDepthFt', label: 'Groundwater depth', labelPa: 'ਧਰਤੀ ਹੇਠਲੇ ਪਾਣੀ ਦੀ ਡੂੰਘਾਈ', type: 'number', unitLabel: 'ft', default: 0, min: 0 },
-    { key: 'durationHours', label: 'Duration', labelPa: 'ਸਮਾਂ', type: 'number', unitLabel: 'hrs', default: 0, min: 0, step: 0.5 },
-    { key: 'irrigationNumber', label: 'Irrigation number', labelPa: 'ਸਿੰਚਾਈ ਨੰਬਰ', type: 'stepper', default: 1, min: 1 },
-    { key: 'pumpHP', label: 'Pump HP', labelPa: 'ਪੰਪ HP', type: 'number', default: 0, min: 0 },
-    { key: 'fuelLitres', label: 'Diesel used', labelPa: 'ਡੀਜ਼ਲ', type: 'number', unitLabel: 'litres', default: 0, min: 0 }
-  ],
-  Harvesting: [
-    { key: 'yieldQtlPerAcre', label: 'Yield', labelPa: 'ਝਾੜ', type: 'stepper', unitLabel: 'qtl/acre', default: 20, min: 0 },
-    { key: 'moisturePct', label: 'Moisture', labelPa: 'ਨਮੀ', type: 'number', unitLabel: '%', default: 0, min: 0, max: 100 },
-    { key: 'priceINRPerQtl', label: 'Price', labelPa: 'ਭਾਅ', type: 'number', unitLabel: '₹/qtl', default: 0, min: 0 },
-    { key: 'fuelLitres', label: 'Diesel used', labelPa: 'ਡੀਜ਼ਲ', type: 'number', unitLabel: 'litres', default: 0, min: 0 },
-    { key: 'otherExpensesINR', label: 'Other expenses', labelPa: 'ਹੋਰ ਖਰਚੇ', type: 'number', unitLabel: '₹', default: 0, min: 0 }
-  ],
-  'Residue Management': [
-    {
-      key: 'method', label: 'Method', labelPa: 'ਢੰਗ', type: 'grid', default: 'Incorporation',
-      options: [
-        { value: 'Burning', label: 'Burning', icon: 'local_fire_department' },
-        { value: 'Incorporation', label: 'Incorporation', icon: 'compost' },
-        { value: 'Baling & Selling', label: 'Baling & Selling', icon: 'inventory_2' }
-      ]
-    },
-    { key: 'quantityQtlPerAcre', label: 'Quantity', labelPa: 'ਮਾਤਰਾ', type: 'number', unitLabel: 'qtl/acre', default: 0, min: 0 },
-    { key: 'fuelLitres', label: 'Diesel used', labelPa: 'ਡੀਜ਼ਲ', type: 'number', unitLabel: 'litres', default: 0, min: 0 },
-    { key: 'costINR', label: 'Cost', labelPa: 'ਖਰਚਾ', type: 'number', unitLabel: '₹', default: 0, min: 0 }
-  ]
+export const FERTILISER = 'Fertiliser (synthetic / bio)'
+export const MANURE = 'Organic manure / compost'
+const isFertiliser = (v: Answers) => v.kind === FERTILISER
+const isManure = (v: Answers) => v.kind === MANURE
+const irrigated = (v: Answers) => !!v.J01 && v.J01 !== 'Not irrigated (rainfed)'
+
+export type ModuleForm = {
+  questions: Question[]
+  // Starting answers for a new entry.
+  initial?: Answers
+  // Set-up answers copied from the farmer's last entry of the same activity.
+  carry?: string[]
+  // Dropped when one entry is saved to several plots, so each plot falls back to its own area.
+  areaIds?: string[]
+  // One-line note shown on the plot timeline.
+  summary: (p: Answers) => string
+}
+
+const join = (...parts: any[]) => parts.filter(p => p !== undefined && p !== null && p !== '').join(' · ')
+
+export const MODULE_FORMS: Record<ModuleKey, ModuleForm> = {
+  'Land Preparation & Sowing': {
+    questions: [q('C01'), q('C02'), q('D02'), q('D03'), q('D04'), q('D05'), q('D06'), COST],
+    carry: ['C01', 'C02'],
+    summary: p => join(p.D02, p.C01)
+  },
+  'Seed & Sowing': {
+    questions: [q('B03'), q('B06'), q('B09'), q('B10'), q('B11'), q('B12'), COST],
+    summary: p => join(p.B03, p.B09 && `${p.B09} kg/acre`)
+  },
+  'Fertilizer & Nutrient Management': {
+    questions: [
+      { id: 'kind', label: 'What was applied?', type: 'choice', options: [FERTILISER, MANURE] },
+      when(isFertiliser, q('F02')),
+      when(isFertiliser, q('F03')),
+      when(isFertiliser, q('F04')),
+      when(isFertiliser, plotArea(q('F05'))),
+      when(isFertiliser, q('F06')),
+      when(isFertiliser, q('F07')),
+      when(isManure, { ...q('G02'), options: q('G02').options!.filter(o => o !== 'No organic amendment') }),
+      when(isManure, q('G04')),
+      when(isManure, plotArea(q('G05'))),
+      COST
+    ],
+    initial: { kind: FERTILISER },
+    areaIds: ['F05', 'G05'],
+    summary: p => (p.kind === MANURE ? join(p.G02, p.G04 && `${p.G04} kg/acre`) : join(p.F03 || p.F02, p.F04 && `${p.F04} ${p.F02?.startsWith('Nano') ? 'L' : 'kg'}/acre`))
+  },
+  'Pest & Disease Management': {
+    questions: [q('I03'), plotArea(q('I04')), q('I05'), q('I_products'), COST],
+    initial: { I_products: [{}] },
+    carry: ['I03'],
+    areaIds: ['I04'],
+    summary: p => join(...(p.I_products || []).map((x: Answers) => x.I08 || x.I06))
+  },
+  'Water Management': {
+    questions: [
+      q('J01'), q('J02'), q('J03'), q('J04'), q('J05'), q('J06'), q('J07'),
+      when(irrigated, plotArea(q('J09'))),
+      when(irrigated, q('J10')),
+      when(irrigated, q('J11')),
+      q('J12'),
+      COST
+    ],
+    carry: ['J01', 'J02', 'J03', 'J04', 'J05', 'J06', 'J07', 'J12'],
+    areaIds: ['J09'],
+    summary: p => join(p.J01, p.J10 && `${p.J10} h`)
+  },
+  Harvesting: {
+    questions: [
+      { id: 'K01pa', label: 'Main produce harvested', help: 'Per acre. The field total (K01) is worked out from the plot area.', type: 'number', unit: 'quintals per acre', min: 0, step: 0.01 },
+      q('K02'), q('K04'), q('K06'), COST
+    ],
+    summary: p => join(p.K01pa && `${p.K01pa} q/acre`, p.K02 && `${p.K02}% moisture`)
+  },
+  'Residue Management': {
+    questions: [q('E05'), q('E06'), q('E07'), COST],
+    summary: p => join(p.E05, p.E06 && `${p.E06} t/acre`)
+  }
 }

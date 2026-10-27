@@ -701,3 +701,27 @@ export function exportValue(q: Question, v: Answers, ctx: Ctx) {
 // Import sheets use plain hyphens ("71-90%"); lists join with "; ".
 export const plain = (val: any): any =>
   Array.isArray(val) ? val.map(plain).join('; ') : typeof val === 'string' ? val.replace(/–/g, '-') : val
+
+// Looks a question up by id anywhere in the survey, including inside repeat groups.
+export function findQuestion(id: string, qs: Question[] = SURVEY_SECTIONS.flatMap(s => s.questions)): Question | undefined {
+  for (const q of qs) {
+    if (q.id === id) return q
+    const inner = q.questions && findQuestion(id, q.questions)
+    if (inner) return inner
+  }
+}
+
+// Answers of the shown questions with suggestions filled in, ready to save. Hidden questions are dropped.
+export function effectiveAnswers(qs: Question[], v: Answers, ctx: Ctx): Answers {
+  const out: Answers = {}
+  for (const q of qs) {
+    if (!isShown(q, v) || q.type === 'calc') continue
+    if (q.type === 'group') {
+      out[q.id] = (v[q.id] || []).map((e: Answers) => effectiveAnswers(q.questions!, { ...v, ...e }, ctx))
+      continue
+    }
+    const val = valueOf(q, v, ctx)
+    if (isAnswered(val)) out[q.id] = val
+  }
+  return out
+}

@@ -9,13 +9,13 @@ export type ModuleKey =
 
 // In crop-season order. `hint` says what gets logged.
 export const MODULES: { key: ModuleKey; icon: string; label: string; labelPa: string; hint: string }[] = [
-  { key: 'Land Preparation & Sowing', icon: 'agriculture', label: 'Land Preparation', labelPa: 'ਭੋਂ ਤਿਆਰੀ', hint: 'Tillage, machine & diesel' },
+  { key: 'Land Preparation & Sowing', icon: 'agriculture', label: 'Land Preparation', labelPa: 'ਭੋਂ ਤਿਆਰੀ', hint: 'Tillage, machine & fuel' },
   { key: 'Seed & Sowing', icon: 'spa', label: 'Seed & Sowing', labelPa: 'ਬੀਜ ਅਤੇ ਬਿਜਾਈ', hint: 'Variety, seed rate & treatment' },
-  { key: 'Fertilizer & Nutrient Management', icon: 'science', label: 'Fertilizer', labelPa: 'ਖਾਦ', hint: 'Product, dose & method' },
-  { key: 'Pest & Disease Management', icon: 'bug_report', label: 'Pest & Disease', labelPa: 'ਕੀੜੇ ਅਤੇ ਬਿਮਾਰੀਆਂ', hint: 'Sprays, products & dose' },
-  { key: 'Water Management', icon: 'water_drop', label: 'Water', labelPa: 'ਪਾਣੀ', hint: 'Irrigation, pump & hours' },
-  { key: 'Harvesting', icon: 'eco', label: 'Harvest', labelPa: 'ਵਾਢੀ', hint: 'Yield, moisture & price' },
-  { key: 'Residue Management', icon: 'recycling', label: 'Residue', labelPa: 'ਪਰਾਲੀ/ਰਹਿਤ-ਖੂਹੰਦ', hint: 'Burn, incorporate or bale' }
+  { key: 'Fertilizer & Nutrient Management', icon: 'science', label: 'Fertiliser & Manure', labelPa: 'ਖਾਦ ਅਤੇ ਰੂੜੀ', hint: 'Product or manure, dose & method' },
+  { key: 'Pest & Disease Management', icon: 'bug_report', label: 'Pest & Disease', labelPa: 'ਕੀੜੇ ਅਤੇ ਬਿਮਾਰੀਆਂ', hint: 'Sprayer & tank-mix products' },
+  { key: 'Water Management', icon: 'water_drop', label: 'Water', labelPa: 'ਪਾਣੀ', hint: 'Method, pump, hours & diesel' },
+  { key: 'Harvesting', icon: 'eco', label: 'Harvest', labelPa: 'ਵਾਢੀ', hint: 'Yield, moisture & transport' },
+  { key: 'Residue Management', icon: 'recycling', label: 'Residue', labelPa: 'ਪਰਾਲੀ/ਰਹਿਤ-ਖੂਹੰਦ', hint: 'How it was managed & how much' }
 ]
 
 export function moduleByKey(key: string) {

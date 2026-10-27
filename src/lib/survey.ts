@@ -1,139 +1,104 @@
 import store from './store'
-import { Activity, Farmer, Plot } from '../types'
+import { Farmer, Plot } from '../types'
 import {
   SURVEY_SECTIONS, Answers, Ctx, Question, HA_PER_ACRE, cropTotals, exportValue, fieldView, isShown, labelOf, makeCtx, plain, unitOf, valueOf, isAnswered
 } from '../config/fatSurvey'
 import { REGEN_COLUMNS, CROP_COLUMNS } from '../config/fatColumns'
+import { MANURE } from '../config/moduleFields'
+import { cftPayload } from './diary'
 
 const round = (v: number, dp = 4) => Math.round(v * 10 ** dp) / 10 ** dp
 const cap = (s?: string) => (s ? s[0].toUpperCase() + s.slice(1) : s)
 
-// Diary values → questionnaire answer lists.
-const FERTILISER_FROM_DIARY: Record<string, string> = { DAP: 'DAP', Urea: 'Urea', MOP: 'MOP (muriate of potash)', Zinc: 'Zinc sulphate', Bio: 'Bio-fertiliser (specify)' }
-const FERT_METHOD_FROM_DIARY: Record<string, string> = { Broadcasting: 'Broadcast', Seeder: 'Drilled with seed (basal)', Fertigation: 'Fertigation', Spray: 'Foliar spray' }
-const CP_UNIT_FROM_DIARY: Record<string, string> = { ml: 'ml per acre', gm: 'g per acre', L: 'L per acre', kg: 'kg per acre' }
-const RESIDUE_FROM_DIARY: Record<string, string> = { Burning: 'Burnt', Incorporation: 'Incorporated into soil', 'Baling & Selling': 'Removed from field (baled / sold / fodder)' }
-const TILLAGE_FROM_DIARY: Record<string, string> = { 'Conventional Tillage': 'Conventional (CT)', 'Super Seeder': 'Reduced (RT)', 'Happy Seeder': 'Zero tillage (ZT)', 'Smart Seeder': 'Zero tillage (ZT)', 'Zero Till Drill': 'Zero tillage (ZT)' }
-const MACHINE_FROM_DIARY: Record<string, string> = { 'Super Seeder': 'Super seeder', 'Happy Seeder': 'Happy seeder', 'Smart Seeder': 'Smart seeder', 'Zero Till Drill': 'Zero-till drill' }
 const LISTED_CROPS = ['Rice', 'Wheat', 'Maize', 'Sugarcane', 'Cotton']
 
-const latest = (acts: Activity[]) => acts.slice().sort((a, b) => b.date.localeCompare(a.date))[0]
-const mostCommon = (values: string[]) => {
-  const counts: Record<string, number> = {}
-  values.forEach(v => { counts[v] = (counts[v] || 0) + 1 })
-  return Object.entries(counts).sort((a, b) => b[1] - a[1])[0]?.[0]
-}
+const copy = (from: Answers | undefined, ids: string[]) =>
+  Object.fromEntries(ids.filter(id => from && isAnswered(from[id])).map(id => [id, from![id]]))
 
 // Field answers (B–L) we can take from this plot's diary, so the advisor only confirms them.
 function prefillField(plot: Plot): Answers {
   const cycles = store.getCropCyclesForPlot(plot.id)
   const cycle = cycles[cycles.length - 1]
   const previous = cycles[cycles.length - 2]
-  const acts = cycle ? store.getActivitiesForCropCycle(cycle.id) : []
-  const of = (m: string) => acts.filter(a => a.module === m)
+  // Diary entries of one activity as CFT answers, oldest first.
+  const entries = (cycleId: string, module: string) => store.getActivitiesForCropCycle(cycleId)
+    .filter(a => a.module === module)
+    .reverse()
+    .map(a => ({ date: a.date, old: !a.payload?.cft, p: cftPayload(a, plot.acres) }))
+  const of = (module: string) => (cycle ? entries(cycle.id, module) : [])
+  const last = (list: { p: Answers }[]) => list[list.length - 1]?.p
   const out: Answers = { B01: plot.id, B04: plot.acres }
 
-  if (cycle) {
-    out.B02 = LISTED_CROPS.includes(cycle.crop) ? cycle.crop : 'Other'
-    if (cycle.sowingDate) out.B07 = cycle.sowingDate
-    if (cycle.harvestDate) out.B08 = cycle.harvestDate
-  }
+  if (cycle) out.B02 = LISTED_CROPS.includes(cycle.crop) ? cycle.crop : 'Other'
   if (previous) {
     out.E01 = LISTED_CROPS.includes(previous.crop) ? previous.crop : 'Other'
-    const residue = latest(store.getActivitiesForCropCycle(previous.id).filter(a => a.module === 'Residue Management'))
-    const method = residue && RESIDUE_FROM_DIARY[residue.payload.method]
-    if (method) {
-      out.E02 = method
-      if (residue.payload.quantityQtlPerAcre) out.E03 = round(residue.payload.quantityQtlPerAcre / 10, 2)
-      if (method === 'Burnt') out.E04 = plot.acres
+    const residue = last(entries(previous.id, 'Residue Management'))
+    if (residue?.E05) {
+      out.E02 = residue.E05
+      if (residue.E06) out.E03 = residue.E06
+      if (residue.E05 === 'Burnt') out.E04 = plot.acres
     }
   }
 
-  const seed = latest(of('Seed & Sowing'))
-  if (seed) {
-    if (seed.payload.variety && seed.payload.variety !== 'Other') out.B03 = seed.payload.variety
-    if (seed.payload.seedRateKgPerAcre) out.B09 = seed.payload.seedRateKgPerAcre
-    out.B10 = seed.payload.seedTreatmentDone ? 'Yes' : 'No'
-    if (seed.payload.seedTreatmentDone && seed.payload.treatmentProduct) out.B12 = seed.payload.treatmentProduct
-  }
+  const seed = of('Seed & Sowing')
+  Object.assign(out, copy(last(seed), ['B03', 'B06', 'B09', 'B10', 'B11', 'B12']))
+  const sown = cycle?.sowingDate || seed[0]?.date
+  if (sown) out.B07 = sown
 
   const prep = of('Land Preparation & Sowing')
-  const prepLatest = latest(prep)
-  if (prepLatest && TILLAGE_FROM_DIARY[prepLatest.payload.prepMethod]) out.C01 = TILLAGE_FROM_DIARY[prepLatest.payload.prepMethod]
-  const machines = prep.filter(a => MACHINE_FROM_DIARY[a.payload.prepMethod]).map(a => ({
-    _diary: true,
-    D02: MACHINE_FROM_DIARY[a.payload.prepMethod],
-    D03: 1,
-    D04: 'Diesel',
-    ...(a.payload.fuelLitres ? { D05: round(a.payload.fuelLitres / plot.acres, 2) } : {}),
-    ...(a.payload.hoursPerAcre ? { D06: a.payload.hoursPerAcre } : {})
-  }))
+  Object.assign(out, copy(last(prep), ['C01', 'C02']))
+  const machines = prep.filter(e => e.p.D02).map(e => ({ _diary: true, ...copy(e.p, ['D02', 'D03', 'D04', 'D05', 'D06']) }))
   if (machines.length) {
     out.D01 = 'Yes'
     out.D_machines = machines
   }
 
-  const residue = latest(of('Residue Management'))
-  if (residue && RESIDUE_FROM_DIARY[residue.payload.method]) {
-    out.E05 = RESIDUE_FROM_DIARY[residue.payload.method]
-    if (residue.payload.quantityQtlPerAcre) out.E06 = round(residue.payload.quantityQtlPerAcre / 10, 2)
+  Object.assign(out, copy(last(of('Residue Management')), ['E05', 'E06', 'E07']))
+
+  const nutrients = of('Fertilizer & Nutrient Management')
+  const fertilisers = nutrients.filter(e => e.p.kind !== MANURE && e.p.F02)
+    .map(e => ({ _diary: true, F01: e.date, ...copy(e.p, ['F02', 'F03', 'F04', 'F05', 'F06', 'F07']) }))
+  if (fertilisers.length) out.F_fertilisers = fertilisers
+  const manures = nutrients.filter(e => e.p.kind === MANURE && e.p.G02)
+    .map(e => ({ _diary: true, G02: e.p.G02, G03: e.date.slice(0, 7), G05: e.p.G05 ?? plot.acres, ...copy(e.p, ['G04']) }))
+  if (manures.length) {
+    out.G01 = 'Yes'
+    out.G_manures = manures
   }
 
-  const fert = of('Fertilizer & Nutrient Management').filter(a => FERTILISER_FROM_DIARY[a.payload.product])
-  if (fert.length) {
-    out.F_fertilisers = fert.slice().reverse().map(a => ({
-      _diary: true,
-      F01: a.date,
-      F02: FERTILISER_FROM_DIARY[a.payload.product],
-      F04: a.payload.quantityKgPerAcre,
-      ...(FERT_METHOD_FROM_DIARY[a.payload.applicationMethod] ? { F06: FERT_METHOD_FROM_DIARY[a.payload.applicationMethod] } : {})
-    }))
-  }
-
-  // Products logged on the same day are one spray with a tank mix.
+  // Old entries held one product each: products logged the same day were one spray.
   const pest = of('Pest & Disease Management')
   if (pest.length) {
-    const byDate = new Map<string, Activity[]>()
-    pest.slice().reverse().forEach(a => byDate.set(a.date, [...(byDate.get(a.date) || []), a]))
+    const sprays: Answers[] = []
+    const oldByDate = new Map<string, Answers>()
+    for (const e of pest) {
+      const merged = e.old && oldByDate.get(e.date)
+      if (merged) {
+        merged.I_products.push(...(e.p.I_products || []))
+        continue
+      }
+      const spray = { _diary: true, I02: e.date, I04: e.p.I04 ?? plot.acres, ...copy(e.p, ['I03', 'I05']), I_products: [...(e.p.I_products || [])] }
+      sprays.push(spray)
+      if (e.old) oldByDate.set(e.date, spray)
+    }
     out.I01 = 'Yes'
-    out.I_sprays = [...byDate.entries()].map(([date, products]) => ({
-      _diary: true,
-      I02: date,
-      I04: plot.acres,
-      I_products: products.map(p => ({
-        I06: p.payload.cppType,
-        ...(p.payload.tradeName ? { I08: p.payload.tradeName } : {}),
-        ...(p.payload.quantityPerAcre ? { I09: p.payload.quantityPerAcre } : {}),
-        ...(CP_UNIT_FROM_DIARY[p.payload.unit] ? { I10: CP_UNIT_FROM_DIARY[p.payload.unit] } : {})
-      }))
-    }))
+    out.I_sprays = sprays
   }
 
   const water = of('Water Management')
   if (water.length) {
-    const method = mostCommon(water.map(a => a.payload.irrigationMethod))
-    if (['Flood', 'Sprinkler', 'Drip'].includes(method)) out.J01 = method
-    const source = mostCommon(water.map(a => a.payload.waterSource))
-    if (source === 'Tubewell' || source === 'Canal') out.J02 = source
-    if (water.some(a => Number(a.payload.fuelLitres) > 0)) out.J03 = 'Diesel'
-    const w = latest(water)
-    if (w.payload.pumpHP) out.J05 = w.payload.pumpHP
-    if (w.payload.groundwaterDepthFt) out.J06 = w.payload.groundwaterDepthFt
-    out.J_irrigations = water.slice().reverse().map(a => ({
-      _diary: true,
-      J08: a.date,
-      J09: plot.acres,
-      ...(a.payload.durationHours ? { J10: a.payload.durationHours } : {}),
-      ...(Number(a.payload.fuelLitres) > 0 ? { J11: a.payload.fuelLitres } : {})
-    }))
+    Object.assign(out, copy(last(water), ['J01', 'J02', 'J03', 'J04', 'J05', 'J06', 'J07', 'J12']))
+    out.J_irrigations = water.map(e => ({ _diary: true, J08: e.date, J09: e.p.J09 ?? plot.acres, ...copy(e.p, ['J10', 'J11']) }))
   }
 
   const harvest = of('Harvesting')
   if (harvest.length) {
-    const h = harvest.reduce((best, a) => (Number(a.payload.yieldQtlPerAcre) > Number(best.payload.yieldQtlPerAcre) ? a : best))
-    if (h.payload.yieldQtlPerAcre) out.K01 = round(h.payload.yieldQtlPerAcre * plot.acres, 2)
-    if (h.payload.moisturePct) out.K02 = h.payload.moisturePct
+    const best = Math.max(...harvest.map(e => Number(e.p.K01pa) || 0))
+    if (best) out.K01 = round(best * plot.acres, 2)
+    Object.assign(out, copy(last(harvest), ['K02', 'K04', 'K06']))
   }
+  const harvested = cycle?.harvestDate || harvest[harvest.length - 1]?.date
+  if (harvested) out.B08 = harvested
   return out
 }
 

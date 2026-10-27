@@ -43,7 +43,7 @@ export default function App() {
     else if (key === 'add') setScreen({ name: 'picker', plotId: null })
   }
 
-  function handleSaveActivity(moduleKey: ModuleKey, plotId: string | null, payload: Record<string, any>, applyAll: boolean) {
+  function handleSaveActivity(moduleKey: ModuleKey, plotId: string | null, payload: Record<string, any>, applyAll: boolean, notes: string) {
     const farmer = store.getFarmers()[0]
     const allPlots = store.getPlots().filter(p => p.farmerId === farmer.id)
     const targetPlots = applyAll || !plotId ? allPlots : allPlots.filter(p => p.id === plotId)
@@ -53,7 +53,7 @@ export default function App() {
       cropCycleId: '',
       module: moduleKey,
       date: payload.date,
-      notes: '',
+      notes,
       payload
     }
 
@@ -97,9 +97,10 @@ export default function App() {
       {screen.name === 'form' && (
         <ActivityForm
           moduleKey={screen.moduleKey}
+          plotId={screen.plotId}
           plotCount={store.getPlots().filter(p => p.farmerId === store.getFarmers()[0].id).length}
           onBack={() => setScreen({ name: 'picker', plotId: screen.plotId })}
-          onSave={(payload, applyAll) => handleSaveActivity(screen.moduleKey, screen.plotId, payload, applyAll)}
+          onSave={(payload, applyAll, notes) => handleSaveActivity(screen.moduleKey, screen.plotId, payload, applyAll, notes)}
         />
       )}
 
