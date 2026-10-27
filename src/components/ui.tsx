@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react'
 import { FieldScene } from './art'
 import store from '../lib/store'
 import { surveyProgress } from '../config/fatSurvey'
+import { farmerPlots } from '../lib/survey'
 
 // Landscape hero used at the top of each screen; content cards overlap its lower edge.
 export function SceneHeader({
@@ -87,10 +88,10 @@ export function useCountUp(target: number, duration = 1100) {
 
 export const stagger = (i: number, base = 0.06) => ({ animationDelay: `${0.1 + i * base}s` })
 
-// Entry point to the FAT survey with live progress for the current farmer.
+// Entry point to the CFT & Regen survey with live progress for the current farmer.
 export function SurveyCard({ onClick, style }: { onClick: () => void; style?: React.CSSProperties }) {
   const farmer = store.getFarmers()[0]
-  const { asked, done } = surveyProgress(store.getSurvey(farmer.id)?.answers || {})
+  const { asked, done } = surveyProgress(store.getSurvey(farmer.id)?.answers || {}, farmerPlots(farmer).map(p => p.id))
   const started = done > 0
   const pct = asked ? Math.round((done / asked) * 100) : 0
   return (
@@ -103,8 +104,8 @@ export function SurveyCard({ onClick, style }: { onClick: () => void; style?: Re
         <span className="material-symbols-outlined text-[30px]">assignment</span>
       </span>
       <span className="flex-1 min-w-0">
-        <span className="block text-label-caps font-label-caps text-violet-700 tracking-widest">REGEN AG 5.1</span>
-        <span className="block text-body-lg font-extrabold text-on-surface">FAT Survey</span>
+        <span className="block text-label-caps font-label-caps text-violet-700 tracking-widest">CFT · REGEN AG 5.1</span>
+        <span className="block text-body-lg font-extrabold text-on-surface">CFT & Regen Survey</span>
         <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">
           {started ? `${done}/${asked} answered` : 'Farm assessment · ਖੇਤ ਸਰਵੇਖਣ'}
         </span>
