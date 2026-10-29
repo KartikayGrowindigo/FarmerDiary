@@ -162,6 +162,42 @@ function ResidueArt({ className }: ArtProps) {
   )
 }
 
+function CoverCropArt({ className }: ArtProps) {
+  return (
+    <svg {...svgProps} className={className}>
+      <Soil top={46} />
+      <Sprout x={14} y={50} s={0.9} />
+      <Sprout x={50} y={50} s={0.9} />
+      <path d="M32 50 C32 40 32 32 32 24" stroke="#4D7C0F" strokeWidth={2.4} strokeLinecap="round" fill="none" />
+      <path d="M32 34 C26 34 20 30 20 24 C26 24 32 28 32 34Z" fill="#65A30D" />
+      <path d="M32 30 C38 30 44 26 44 20 C38 20 32 24 32 30Z" fill="#A3E635" />
+      <path d="M33 26 C40 30 46 38 44 46 C40 44 34 36 33 26Z" fill="#84CC16" />
+      <path d="M36 32 Q40 38 41 44" stroke="#4D7C0F" strokeWidth={1.2} fill="none" />
+      {[37, 40, 43].map(y => <circle key={y} cx={(y - 26) * 0.6 + 33} cy={y - 4} r={1.6} fill="#ECFCCB" />)}
+      <circle cx={32} cy={20} r={3} fill="#FDE047" />
+      <circle cx={32} cy={20} r={1.2} fill="#CA8A04" />
+    </svg>
+  )
+}
+
+function TreeArt({ className }: ArtProps) {
+  return (
+    <svg {...svgProps} className={className}>
+      <ellipse cx={32} cy={58} rx={20} ry={3} fill="#065F46" opacity={0.2} />
+      <path d="M29 58 L30 34 H34 L35 58Z" fill="#92400E" />
+      <path d="M32 44 L24 36 M32 40 L40 33" stroke="#92400E" strokeWidth={2.4} strokeLinecap="round" />
+      <circle cx={22} cy={30} r={11} fill="#059669" />
+      <circle cx={42} cy={28} r={12} fill="#10B981" />
+      <circle cx={32} cy={18} r={13} fill="#34D399" />
+      <circle cx={27} cy={14} r={4} fill="#A7F3D0" opacity={0.7} />
+      <circle cx={12} cy={55} r={4} fill="#34D399" />
+      <rect x={11} y={55} width={2} height={4} fill="#92400E" />
+      <circle cx={53} cy={54} r={3.5} fill="#10B981" />
+      <rect x={52} y={54} width={2} height={4} fill="#92400E" />
+    </svg>
+  )
+}
+
 const MODULE_ART: Record<ModuleKey, (p: ArtProps) => JSX.Element> = {
   'Land Preparation & Sowing': LandPrepArt,
   'Seed & Sowing': SeedArt,
@@ -169,7 +205,9 @@ const MODULE_ART: Record<ModuleKey, (p: ArtProps) => JSX.Element> = {
   'Pest & Disease Management': PestArt,
   'Water Management': WaterArt,
   Harvesting: HarvestArt,
-  'Residue Management': ResidueArt
+  'Residue Management': ResidueArt,
+  'Cover Crop & Legume': CoverCropArt,
+  'Tree Planting': TreeArt
 }
 
 export function ModuleArt({ moduleKey, className }: { moduleKey: string } & ArtProps) {

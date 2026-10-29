@@ -23,6 +23,10 @@ export const FERTILISER = 'Fertiliser (synthetic / bio)'
 export const MANURE = 'Organic manure / compost'
 const isFertiliser = (v: Answers) => v.kind === FERTILISER
 const isManure = (v: Answers) => v.kind === MANURE
+export const PREVIOUS_RESIDUE = 'Previous crop (before sowing)'
+export const CURRENT_RESIDUE = 'This crop (after harvest)'
+const isPreviousResidue = (v: Answers) => v.residueOf === PREVIOUS_RESIDUE
+const isCurrentResidue = (v: Answers) => v.residueOf !== PREVIOUS_RESIDUE
 const irrigated = (v: Answers) => !!v.J01 && v.J01 !== 'Not irrigated (rainfed)'
 
 export type ModuleForm = {
@@ -31,7 +35,8 @@ export type ModuleForm = {
   initial?: Answers
   // Set-up answers copied from the farmer's last entry of the same activity.
   carry?: string[]
-  // Dropped when one entry is saved to several plots, so each plot falls back to its own area.
+  // Areas and field totals, dropped when one entry is saved to several plots so each plot falls back
+  // to its own area.
   areaIds?: string[]
   // One-line note shown on the plot timeline.
   summary: (p: Answers) => string
@@ -90,12 +95,40 @@ export const MODULE_FORMS: Record<ModuleKey, ModuleForm> = {
   Harvesting: {
     questions: [
       { id: 'K01pa', label: 'Main produce harvested', help: 'Per acre. The field total (K01) is worked out from the plot area.', type: 'number', unit: 'quintals per acre', min: 0, step: 0.01 },
-      q('K02'), q('K04'), q('K06'), COST
+      q('K02'), q('K03'), q('K04'), q('K05'), q('K06'), COST
     ],
+    areaIds: ['K03', 'K05'],
     summary: p => join(p.K01pa && `${p.K01pa} q/acre`, p.K02 && `${p.K02}% moisture`)
   },
   'Residue Management': {
-    questions: [q('E05'), q('E06'), q('E07'), COST],
-    summary: p => join(p.E05, p.E06 && `${p.E06} t/acre`)
+    questions: [
+      { id: 'residueOf', label: 'Residue of which crop?', type: 'choice', options: [CURRENT_RESIDUE, PREVIOUS_RESIDUE] },
+      when(isPreviousResidue, q('E01')),
+      when(isPreviousResidue, q('E02')),
+      when(isPreviousResidue, q('E03')),
+      when(isPreviousResidue, plotArea(q('E04'))),
+      when(isCurrentResidue, q('E05')),
+      when(isCurrentResidue, q('E06')),
+      when(isCurrentResidue, q('E07')),
+      COST
+    ],
+    initial: { residueOf: CURRENT_RESIDUE },
+    areaIds: ['E04'],
+    summary: p => (p.residueOf === PREVIOUS_RESIDUE
+      ? join(p.E01 && `${p.E01} residue`, p.E02, p.E03 && `${p.E03} t/acre`)
+      : join(p.E05, p.E06 && `${p.E06} t/acre`))
+  },
+  'Cover Crop & Legume': {
+    questions: [
+      { ...q('H01'), options: q('H01').options!.filter(o => o !== 'None') },
+      q('H02'), q('H03'), q('H04'), plotArea(q('H05')), q('H06'), COST
+    ],
+    areaIds: ['H05'],
+    summary: p => join(p.H02, p.H06 && `${p.H06} q/acre`)
+  },
+  'Tree Planting': {
+    questions: [q('L02'), q('L03'), q('L04'), q('L05'), COST],
+    areaIds: ['L04'],
+    summary: p => join(p.L02, p.L04 && `${p.L04} trees`, p.L05)
   }
 }

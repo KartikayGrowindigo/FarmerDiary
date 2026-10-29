@@ -25,7 +25,7 @@ export function impactForCycle(current: Activity[], prior: Activity[]) {
   // Aggregate helpers
   const sum = (arr: Activity[], key: string) => arr.reduce((s, a) => s + (Number(cftPayload(a)[key]) || 0), 0)
   const residueMethod = (arr: Activity[]) => {
-    const r = arr.find(a => a.module === 'Residue Management')
+    const r = arr.find(a => a.module === 'Residue Management' && cftPayload(a).E05)
     return (r && RESIDUE_FACTOR_KEY[cftPayload(r).E05]) || ''
   }
   const residueCurrentMethod = residueMethod(current)

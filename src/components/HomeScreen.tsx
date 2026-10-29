@@ -4,7 +4,8 @@ import { MODULES } from '../config/modules'
 import { Logo, PlotArt } from './art'
 import { SceneHeader, Initials, SurveyCard, stagger } from './ui'
 
-const TOTAL_MODULES = MODULES.length
+const CORE_MODULES = new Set<string>(MODULES.filter(m => !m.optional).map(m => m.key))
+const TOTAL_MODULES = CORE_MODULES.size
 const RADIUS = 40
 const CIRCUMFERENCE = 2 * Math.PI * RADIUS
 
@@ -45,7 +46,7 @@ export default function HomeScreen({ onOpenPlot, onOpenSurvey }: { onOpenPlot: (
         {plots.map((plot, idx) => {
           const plotCycle = store.getCurrentCropCycle(plot.id)
           const activities = plotCycle ? store.getActivitiesForCropCycle(plotCycle.id) : []
-          const completion = Math.min(TOTAL_MODULES, new Set(activities.map(a => a.module)).size)
+          const completion = Math.min(TOTAL_MODULES, new Set(activities.map(a => a.module).filter(m => CORE_MODULES.has(m))).size)
           const fraction = completion / TOTAL_MODULES
           const dashOffset = CIRCUMFERENCE * (1 - fraction)
 

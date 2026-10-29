@@ -6,16 +6,21 @@ export type ModuleKey =
   | 'Water Management'
   | 'Harvesting'
   | 'Residue Management'
+  | 'Cover Crop & Legume'
+  | 'Tree Planting'
 
-// In crop-season order. `hint` says what gets logged.
-export const MODULES: { key: ModuleKey; icon: string; label: string; labelPa: string; hint: string }[] = [
+// In crop-season order. `hint` says what gets logged. `optional` activities are not done every season,
+// so they don't count towards a plot's completion.
+export const MODULES: { key: ModuleKey; icon: string; label: string; labelPa: string; hint: string; optional?: boolean }[] = [
   { key: 'Land Preparation & Sowing', icon: 'agriculture', label: 'Land Preparation', labelPa: 'ਭੋਂ ਤਿਆਰੀ', hint: 'Tillage, machine & fuel' },
   { key: 'Seed & Sowing', icon: 'spa', label: 'Seed & Sowing', labelPa: 'ਬੀਜ ਅਤੇ ਬਿਜਾਈ', hint: 'Variety, seed rate & treatment' },
   { key: 'Fertilizer & Nutrient Management', icon: 'science', label: 'Fertiliser & Manure', labelPa: 'ਖਾਦ ਅਤੇ ਰੂੜੀ', hint: 'Product or manure, dose & method' },
   { key: 'Pest & Disease Management', icon: 'bug_report', label: 'Pest & Disease', labelPa: 'ਕੀੜੇ ਅਤੇ ਬਿਮਾਰੀਆਂ', hint: 'Sprayer & tank-mix products' },
   { key: 'Water Management', icon: 'water_drop', label: 'Water', labelPa: 'ਪਾਣੀ', hint: 'Method, pump, hours & diesel' },
   { key: 'Harvesting', icon: 'eco', label: 'Harvest', labelPa: 'ਵਾਢੀ', hint: 'Yield, moisture & transport' },
-  { key: 'Residue Management', icon: 'recycling', label: 'Residue', labelPa: 'ਪਰਾਲੀ/ਰਹਿਤ-ਖੂਹੰਦ', hint: 'How it was managed & how much' }
+  { key: 'Residue Management', icon: 'recycling', label: 'Residue', labelPa: 'ਪਰਾਲੀ/ਰਹਿਤ-ਖੂਹੰਦ', hint: 'How it was managed & how much' },
+  { key: 'Cover Crop & Legume', icon: 'spa', label: 'Cover Crop / Legume', labelPa: 'ਕਵਰ ਫ਼ਸਲ / ਦਾਲ', hint: 'Crop, dates, area & production', optional: true },
+  { key: 'Tree Planting', icon: 'park', label: 'Trees', labelPa: 'ਰੁੱਖ', hint: 'Species, year, number & model', optional: true }
 ]
 
 export function moduleByKey(key: string) {
@@ -30,7 +35,9 @@ export const MODULE_THEME: Record<ModuleKey, { from: string; to: string; tint: s
   'Pest & Disease Management': { from: '#BE123C', to: '#FB7185', tint: '#FFE4E6', ink: '#9F1239' },
   'Water Management': { from: '#0369A1', to: '#38BDF8', tint: '#E0F2FE', ink: '#075985' },
   Harvesting: { from: '#B45309', to: '#FACC15', tint: '#FEF9C3', ink: '#854D0E' },
-  'Residue Management': { from: '#0F766E', to: '#2DD4BF', tint: '#CCFBF1', ink: '#115E59' }
+  'Residue Management': { from: '#0F766E', to: '#2DD4BF', tint: '#CCFBF1', ink: '#115E59' },
+  'Cover Crop & Legume': { from: '#4D7C0F', to: '#A3E635', tint: '#F7FEE7', ink: '#3F6212' },
+  'Tree Planting': { from: '#047857', to: '#34D399', tint: '#D1FAE5', ink: '#065F46' }
 }
 
 export function themeFor(key: string) {

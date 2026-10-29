@@ -4,7 +4,7 @@ import {
   SURVEY_SECTIONS, Answers, Ctx, Question, HA_PER_ACRE, cropTotals, exportValue, fieldView, isShown, labelOf, makeCtx, plain, unitOf, valueOf, isAnswered
 } from '../config/fatSurvey'
 import { REGEN_COLUMNS, CROP_COLUMNS } from '../config/fatColumns'
-import { MANURE } from '../config/moduleFields'
+import { MANURE, PREVIOUS_RESIDUE } from '../config/moduleFields'
 import { cftPayload } from './diary'
 
 const round = (v: number, dp = 4) => Math.round(v * 10 ** dp) / 10 ** dp
@@ -27,12 +27,13 @@ function prefillField(plot: Plot): Answers {
     .map(a => ({ date: a.date, old: !a.payload?.cft, p: cftPayload(a, plot.acres) }))
   const of = (module: string) => (cycle ? entries(cycle.id, module) : [])
   const last = (list: { p: Answers }[]) => list[list.length - 1]?.p
+  const previousResidue = (e: { p: Answers }) => e.p.residueOf === PREVIOUS_RESIDUE
   const out: Answers = { B01: plot.id, B04: plot.acres }
 
   if (cycle) out.B02 = LISTED_CROPS.includes(cycle.crop) ? cycle.crop : 'Other'
   if (previous) {
     out.E01 = LISTED_CROPS.includes(previous.crop) ? previous.crop : 'Other'
-    const residue = last(entries(previous.id, 'Residue Management'))
+    const residue = last(entries(previous.id, 'Residue Management').filter(e => !previousResidue(e)))
     if (residue?.E05) {
       out.E02 = residue.E05
       if (residue.E06) out.E03 = residue.E06
@@ -53,7 +54,14 @@ function prefillField(plot: Plot): Answers {
     out.D_machines = machines
   }
 
-  Object.assign(out, copy(last(of('Residue Management')), ['E05', 'E06', 'E07']))
+  // Previous-crop residue logged this season wins over what the previous season's diary shows.
+  const residue = of('Residue Management')
+  const before = last(residue.filter(previousResidue))
+  if (before) {
+    for (const id of ['E01', 'E02', 'E03', 'E04']) delete out[id]
+    Object.assign(out, copy(before, ['E01', 'E02', 'E03', 'E04']))
+  }
+  Object.assign(out, copy(last(residue.filter(e => !previousResidue(e))), ['E05', 'E06', 'E07']))
 
   const nutrients = of('Fertilizer & Nutrient Management')
   const fertilisers = nutrients.filter(e => e.p.kind !== MANURE && e.p.F02)
@@ -85,6 +93,19 @@ function prefillField(plot: Plot): Answers {
     out.I_sprays = sprays
   }
 
+  const cover = of('Cover Crop & Legume')
+  if (cover.length) {
+    out.H01 = last(cover).H01
+    out.H_crops = cover.map(e => ({ _diary: true, H05: e.p.H05 ?? plot.acres, ...copy(e.p, ['H02', 'H03', 'H04', 'H06']) }))
+  }
+
+  // Trees stay on the field, so plantings from every season count.
+  const trees = cycles.flatMap(c => entries(c.id, 'Tree Planting'))
+  if (trees.length) {
+    out.L01 = 'Yes'
+    out.L_trees = trees.map(e => ({ _diary: true, ...copy(e.p, ['L02', 'L03', 'L04', 'L05']) }))
+  }
+
   const water = of('Water Management')
   if (water.length) {
     Object.assign(out, copy(last(water), ['J01', 'J02', 'J03', 'J04', 'J05', 'J06', 'J07', 'J12']))
@@ -95,7 +116,7 @@ function prefillField(plot: Plot): Answers {
   if (harvest.length) {
     const best = Math.max(...harvest.map(e => Number(e.p.K01pa) || 0))
     if (best) out.K01 = round(best * plot.acres, 2)
-    Object.assign(out, copy(last(harvest), ['K02', 'K04', 'K06']))
+    Object.assign(out, copy(last(harvest), ['K02', 'K03', 'K04', 'K05', 'K06']))
   }
   const harvested = cycle?.harvestDate || harvest[harvest.length - 1]?.date
   if (harvested) out.B08 = harvested
