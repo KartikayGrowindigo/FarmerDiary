@@ -90,11 +90,12 @@ const COVER_TYPES = ['(a) Grasses / cereals (e.g. oats, sorghum)', '(b) Legumes 
 const RESIDUE_SHARE = ['0–50%', '51–60%', '61–70%', '71–80%', '81–90%', '91–100%']
 const COVER10_SHARE = ['0–30%', '31–50%', '51–70%', '71–90%', '91–100%']
 const SHARE = ['0–10%', '11–30%', '31–50%', '51–70%', '71–90%', '91–100%']
-const FOUR_R = ['(a) Right source – product suited to crop and soil', '(b) Right rate – dose based on soil test or crop need', '(c) Right time – split doses when the crop needs them', '(d) Right place – placed near the roots (band, drill, fertigation)']
-const IPM = ['(a) Pest & disease monitoring (field scouting, traps)', '(b) Spray only when the pest crosses the damage threshold', '(c) Correct quantity / dose as per label', '(d) Right time (pest stage, waiting period before harvest)', '(e) Right place – spot / targeted spraying only where needed']
+const NONE_OF_THESE = 'None of these'
+const FOUR_R = ['(a) Right source – product suited to crop and soil', '(b) Right rate – dose based on soil test or crop need', '(c) Right time – split doses when the crop needs them', '(d) Right place – placed near the roots (band, drill, fertigation)', NONE_OF_THESE]
+const IPM = ['(a) Pest & disease monitoring (field scouting, traps)', '(b) Spray only when the pest crosses the damage threshold', '(c) Correct quantity / dose as per label', '(d) Right time (pest stage, waiting period before harvest)', '(e) Right place – spot / targeted spraying only where needed', NONE_OF_THESE]
 const NO_SYNTHETIC_SHARE = ['0–5%', '6–25%', '26–50%', '51–75%', '76–100%']
 const HABITAT_SHARE = ['0%', '1–4%', '5–9%', '10–14%', '15% or more']
-const PRECISION_TECH = ['(a) Auto-steer / parallel driving in machines', '(b) Section control or variable-rate application of fertiliser or pesticide', '(c) Digital farm decision-support app / advisory tool', '(d) Optical / crop sensors']
+const PRECISION_TECH = ['(a) Auto-steer / parallel driving in machines', '(b) Section control or variable-rate application of fertiliser or pesticide', '(c) Digital farm decision-support app / advisory tool', '(d) Optical / crop sensors', NONE_OF_THESE]
 const EVIDENCE = ['Farmer diary', 'Fertiliser / pesticide purchase bills', 'Soil Health Card / soil report', 'Procurement receipt', 'Field photos', 'None', 'Other']
 // Koltiva rows without a stored list keep the answers seen in the import sheets.
 const SOIL_INTERVAL = ['No Analysis', '1 year', '2 years', '3 years', '5 years', 'More than 5 years']
@@ -133,7 +134,8 @@ const inSeason = (before: number) => (val: string, v: Answers) => {
   return null
 }
 
-const count = (val: any) => (Array.isArray(val) ? val.length : 0)
+// "None of these" is not counted.
+const count = (val: any) => (Array.isArray(val) ? val.filter(o => o !== NONE_OF_THESE).length : 0)
 // "Yes" = all principles, "Partially" = the ones ticked.
 const principles = (total: number, partial: string) => (val: string, v: Answers) => {
   if (val === 'Yes') return `${total} principles`
@@ -142,7 +144,7 @@ const principles = (total: number, partial: string) => (val: string, v: Answers)
   return n ? `${n} principle${n === 1 ? '' : 's'}` : 'None'
 }
 const partialPicks = (total: number) => (val: any) =>
-  count(val) >= total ? `All ${total} ticked – answer "Yes" above instead` : null
+  count(val) >= total ? `All ${total} ticked – answer "Yes" above instead` : count(val) === 0 ? 'None ticked – answer "No" above instead' : null
 
 // ---- Totals per crop across the farmer's fields (feeds the Koltiva crop questions) ----
 
@@ -479,14 +481,24 @@ export const SURVEY_SECTIONS: Section[] = [
   },
 
   // ---- Koltiva tab: whole farm, once a year (Regen AG5.1) ----
-  // RW-001–004 are taken from A13, A08 + A09, A12 and A01 (see lib/survey.ts).
+  // RW-001–004 are repeated from section A and export from there (see lib/survey.ts).
+  {
+    key: 'rwGeneral', sheet: 'Koltiva', scope: 'farm',
+    title: 'General Information', titlePa: 'ਆਮ ਜਾਣਕਾਰੀ', icon: 'info', tone: tone.teal,
+    intro: 'Whole farm, once a year. The first four answers come from Farmer Details (A).',
+    questions: [
+      { id: 'RW-001', label: 'On what date was the data collected from the farmer?', help: 'From A13.', type: 'calc', calc: v => v.A13 || null },
+      { id: 'RW-002', label: 'Which reporting year and crop season does this data relate to?', help: 'From A08 and A09.', type: 'calc', calc: v => [v.A08, v.A09, v.A09 && 'Crop'].filter(Boolean).join(' ') || null },
+      { id: 'RW-003', label: 'What is the name of the person being interviewed?', help: 'From A12.', type: 'calc', calc: v => v.A12 || v.A03 || null },
+      { id: 'RW-004', label: 'What is the name of the enumerator who collected the data?', help: 'From A01.', type: 'calc', calc: v => v.A01 || null },
+      { id: 'RW-005', label: 'What evidence is available to submit in support of these responses?', type: 'multi', options: EVIDENCE, exclusive: ['None'], column: 'General Infomation - Is there any evidence to submit?' },
+      { id: 'RW-006', label: 'Can a photo of the submitted evidence be provided?', type: 'choice', options: YES_NO, column: 'General Infomation - Evidence Photo' }
+    ]
+  },
   {
     key: 'rwFarm', sheet: 'Koltiva', scope: 'farm',
     title: 'Farm Profile', titlePa: 'ਫਾਰਮ ਦਾ ਵੇਰਵਾ', icon: 'home_work', tone: tone.teal,
-    intro: 'Whole farm, once a year.',
     questions: [
-      { id: 'RW-005', label: 'What evidence is available to submit in support of these responses?', type: 'multi', options: EVIDENCE, exclusive: ['None'], column: 'General Infomation - Is there any evidence to submit?' },
-      { id: 'RW-006', label: 'Can a photo of the submitted evidence be provided?', type: 'choice', options: YES_NO, column: 'General Infomation - Evidence Photo' },
       { id: 'RW-007', label: 'What is the total area of arable crop land on the farm?', type: 'number', unit: 'ha', min: 0, step: 0.01, column: 'Farm - Arable crop land (ha)' },
       { id: 'RW-008', label: 'What is the area of permanent crop land on the farm (for example fruit orchards, coffee or cocoa)?', type: 'number', unit: 'ha', min: 0, step: 0.01, column: 'Farm - Permanent crop land (ha), e.g. fruit orchards, coffee, cocoa, etc.' },
       { id: 'RW-009', label: 'What is the area of permanent pastures on the farm?', type: 'number', unit: 'ha', min: 0, step: 0.01, column: 'Farm - Permanent pastures (ha)' },
@@ -497,7 +509,13 @@ export const SURVEY_SECTIONS: Section[] = [
       { id: 'RW-014', label: 'What was the source of the soil organic matter data?', help: `e.g. Eureka, ICRISAT. ${HARD}`, type: 'text', optional: true, column: 'Farm - Source of the data' },
       { id: 'RW-015', label: 'In which year was the soil analysis carried out?', help: HARD, type: 'integer', min: 2000, max: new Date().getFullYear(), optional: true, column: 'Farm - Year of soil analysis assessment' },
       { id: 'RW-016', label: 'Does the farm hold any production certificates or labels?', type: 'choice', options: YES_NO, column: 'Farm - Certificates/Label Production' },
-      { id: 'RW-017', label: 'What is the name of each production certificate or label held by the farm?', type: 'text', showIf: v => v['RW-016'] === 'Yes', column: 'Farm - Name of Certificate / Label' }
+      {
+        id: 'RW-017', label: 'What is the name of each production certificate or label held by the farm?', help: 'Separate names with commas. "None" if RW-016 is No.', type: 'text',
+        derive: v => (v['RW-016'] === 'No' ? 'None' : undefined),
+        validate: (val, v) => (v['RW-016'] === 'No' && val !== 'None' ? 'RW-016 says the farm holds no certificate or label' : null),
+        column: 'Farm - Name of Certificate / Label',
+        toExport: (val, v) => (v['RW-016'] === 'No' ? 'NA' : val)
+      }
     ]
   },
   {
@@ -537,7 +555,7 @@ export const SURVEY_SECTIONS: Section[] = [
         column: 'Soil - 1.08 Do you calculate your fertilizer plan (nutrient balance) on the basis of the 4 R Nutrient Stewardship Principles. If partially yes, how many of the following principles do you apply:  (a) Right Source,  (b) Right Rate, (c) Right Time, (d) Right Place)?',
         toExport: principles(4, 'RW-034')
       },
-      { id: 'RW-034', label: 'Which of the 4R principles are applied?', help: 'Partially means fewer than all 4.', type: 'multi', options: FOUR_R, showIf: v => v['RW-033'] === 'Partially', validate: partialPicks(4) },
+      { id: 'RW-034', label: 'Which of the 4R principles are applied?', help: 'Partially means fewer than all 4.', type: 'multi', options: FOUR_R, exclusive: [NONE_OF_THESE], showIf: v => v['RW-033'] === 'Partially', validate: partialPicks(4) },
       { id: 'RW-035', label: 'Is crop residue burned on more than 10% of the field area?', type: 'choice', options: YES_NO, column: 'Soil - 1.11 Do you burn crop residue in more than 10% of your field?',
         derive: (_, ctx) => {
           let acres = 0, burnt = 0, known = false
@@ -564,7 +582,7 @@ export const SURVEY_SECTIONS: Section[] = [
         column: 'Biodiversity and Land use - 2.01 Do you follow Integrated Pest Management (IPM) principles when applying plant protection products? If partially yes, how many of the following principles do you apply: (a) Appropriate pest and disease monitoring, (b) Appropriate intervention measures, (c) Appropriate quantity/dose, (d) Appropriate time, (e) Appropriate place',
         toExport: principles(5, 'RW-039')
       },
-      { id: 'RW-039', label: 'Which IPM principles are applied?', help: 'Partially means fewer than all 5.', type: 'multi', options: IPM, showIf: v => v['RW-038'] === 'Partially', validate: partialPicks(5) },
+      { id: 'RW-039', label: 'Which IPM principles are applied?', help: 'Partially means fewer than all 5.', type: 'multi', options: IPM, exclusive: [NONE_OF_THESE], showIf: v => v['RW-038'] === 'Partially', validate: partialPicks(5) },
       { id: 'RW-040', label: 'What percentage of crop land has no synthetic pest and disease control applied?', type: 'choice', options: NO_SYNTHETIC_SHARE, column: 'Biodiversity and Land use - 2.02 What is the percentage of crop land without synthetic pest and disease control (land without synthetic pest control/ total crop land x 100)' },
       { id: 'RW-041', label: 'What percentage of crop and pasture land has no synthetic herbicide applied?', type: 'choice', options: NO_SYNTHETIC_SHARE, column: 'Biodiversity and Land use - 2.03 What is the percentage of crop and pasture land without synthetic herbicide application? (land without synthetic herbicide control/ total crop land x 100)' },
       { id: 'RW-042', label: 'What percentage of the agricultural area is maintained as biodiversity habitat?', help: 'Hedges, tree alleys, flower strips, natural habitats, green belts, riparian areas or non-farmed area that could be cultivated.', type: 'choice', options: HABITAT_SHARE, column: 'Biodiversity and Land use - 2.04 What is the percentage of agricultural area being biodiversity habitats such as hedge, trees alley, flower strip, natural habitats, green belts, riparian area, non farmed area (that could potentially be cultivated) etc? (agriculture area with biodiversity habitat / total crop land x 100)' },
@@ -618,7 +636,7 @@ export const SURVEY_SECTIONS: Section[] = [
         column: 'Competencies - 5.03 Do you make use of precision farming technologies such as (a) automated parallel driving systems in machines, (b) section control or variable rate application of fertilizers or pesticides, (c) the use of digital farm and/or animal decision support tools and (d) optical sensors? If yes, how many types of technologies do yo make use of?',
         toExport: (val, v) => (val === 'Yes' ? count(v['RW-066']) : 0)
       },
-      { id: 'RW-066', label: 'Which of the four types of precision farming technology are used?', type: 'multi', options: PRECISION_TECH, showIf: v => v['RW-065'] === 'Yes' }
+      { id: 'RW-066', label: 'Which of the four types of precision farming technology are used?', type: 'multi', options: PRECISION_TECH, exclusive: [NONE_OF_THESE], showIf: v => v['RW-065'] === 'Yes', validate: val => (count(val) === 0 ? 'None ticked – answer "No" above instead' : null) }
     ]
   }
 ]
