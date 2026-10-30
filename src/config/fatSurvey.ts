@@ -236,6 +236,18 @@ const irrigated = (v: Answers) => !!v.J01 && v.J01 !== 'Not irrigated (rainfed)'
 const hasPump = (v: Answers) => irrigated(v) && v.J03 !== 'No pump (gravity flow)'
 const organicApplied = (v: Answers) => v.G02 !== 'No organic amendment'
 const hasWaterBody = (v: Answers) => !!v['RW-049'] && v['RW-049'] !== NO_WATER_BODY
+// RW-050/051: always asked; "No water body" follows RW-049 and exports as NA.
+const waterBodyShare: Pick<Question, 'type' | 'options' | 'derive' | 'validate' | 'toExport'> = {
+  type: 'choice',
+  options: [NO_WATER_BODY, ...SHARE],
+  derive: v => (v['RW-049'] === NO_WATER_BODY ? NO_WATER_BODY : undefined),
+  validate: (val, v) => {
+    if (val === NO_WATER_BODY && hasWaterBody(v)) return 'RW-049 says there is a water body on the farm'
+    if (val !== NO_WATER_BODY && v['RW-049'] === NO_WATER_BODY) return 'RW-049 says there is no water body on the farm'
+    return null
+  },
+  toExport: val => (val === NO_WATER_BODY ? 'NA' : plain(val))
+}
 const HARD = 'Hard for farmers to answer – fill from the soil report if available.'
 
 export const SURVEY_SECTIONS: Section[] = [
@@ -591,8 +603,8 @@ export const SURVEY_SECTIONS: Section[] = [
         column: 'Water - 3.04 If you have water bodies at your farm (eg. rivers, ponds, lakes), what is the minimum distance between field application area (fertilizer/manure and pesticide) and the water body?',
         toExport: val => (val === NO_WATER_BODY ? 'NA' : val.replace(/–/g, '-'))
       },
-      { id: 'RW-050', label: "What percentage of the farm's water bodies have riparian buffer strips such as bushes or trees?", type: 'choice', options: SHARE, showIf: hasWaterBody, column: 'Water - 3.05 What is the percentage of water bodies with riparian buffer strips such as bushes, trees, etc.?  (Length of adjacent water body with riparian buffer/ total length of adjacent water body x 100)' },
-      { id: 'RW-051', label: "What percentage of the farm's water bodies are fenced off from animal access?", type: 'choice', options: SHARE, showIf: hasWaterBody, column: 'Water - 3.06 What % of your water bodies fenced from animal access? (Length of water body fenced / total length of water body x 100)' }
+      { id: 'RW-050', label: "What percentage of the farm's water bodies have riparian buffer strips such as bushes or trees?", help: 'Length of water body edge with a buffer ÷ total length of water body edge.', ...waterBodyShare, column: 'Water - 3.05 What is the percentage of water bodies with riparian buffer strips such as bushes, trees, etc.?  (Length of adjacent water body with riparian buffer/ total length of adjacent water body x 100)' },
+      { id: 'RW-051', label: "What percentage of the farm's water bodies are fenced off from animal access?", help: 'Length of water body fenced ÷ total length of water body.', ...waterBodyShare, column: 'Water - 3.06 What % of your water bodies fenced from animal access? (Length of water body fenced / total length of water body x 100)' }
     ]
   },
   {
