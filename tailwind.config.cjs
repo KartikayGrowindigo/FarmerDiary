@@ -1,6 +1,8 @@
 module.exports = {
   content: ['./index.html', './src/**/*.{ts,tsx}'],
   darkMode: 'class',
+  // Hover styles only on devices that can hover, so taps on phones don't leave cards stuck lifted.
+  future: { hoverOnlyWhenSupported: true },
   theme: {
     extend: {
       colors: {

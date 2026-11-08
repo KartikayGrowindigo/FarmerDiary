@@ -43,7 +43,7 @@ export default function ImpactScreen() {
   const emissionsDisplay = Math.round(useCountUp(Math.abs(emissionsPct)))
 
   return (
-    <div className="text-on-surface min-h-screen flex flex-col pb-32">
+    <div className="text-on-surface min-h-screen min-h-dvh flex flex-col pb-[calc(8rem_+_env(safe-area-inset-bottom))]">
       <SceneHeader
         title="Impact"
         right={<Initials name={farmer.name} className="w-11 h-11 text-body-md" />}

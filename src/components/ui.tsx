@@ -21,9 +21,9 @@ export function SceneHeader({
   tall?: boolean
 }) {
   return (
-    <header className={`relative overflow-hidden text-white ${tall ? 'h-[260px]' : 'h-[190px]'}`}>
+    <header className={`relative overflow-hidden text-white pt-[env(safe-area-inset-top)] ${tall ? 'h-[260px]' : 'h-[190px]'}`}>
       <FieldScene className="absolute inset-0 w-full h-full" compact={!tall} />
-      <div className="relative z-10 px-margin-edge pt-5 flex items-start gap-3">
+      <div className="relative z-10 max-w-2xl mx-auto px-margin-edge pt-5 flex items-start gap-3">
         {onBack && (
           <button
             onClick={onBack}

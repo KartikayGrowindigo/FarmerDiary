@@ -65,7 +65,7 @@ function GroupCard({ q, view, entries, ctx, onChange, nested }: {
           <div className="flex items-center gap-2">
             <span className="flex-1 text-body-md font-extrabold text-[var(--ink)]">{Item} {i + 1}</span>
             {e._diary && <Badge icon="menu_book" text="From diary" />}
-            <button onClick={() => remove(i)} aria-label={`Remove ${item} ${i + 1}`} className="h-9 w-9 rounded-full bg-[var(--tint)] text-[var(--ink)] flex items-center justify-center active:scale-90 transition-transform">
+            <button onClick={() => remove(i)} aria-label={`Remove ${item} ${i + 1}`} className="h-11 w-11 shrink-0 rounded-full bg-[var(--tint)] text-[var(--ink)] flex items-center justify-center active:scale-90 transition-transform">
               <span className="material-symbols-outlined text-[20px]">delete</span>
             </button>
           </div>
@@ -160,7 +160,7 @@ function QuestionCard({ q, view, ctx, fromDiary, onChange, nested }: {
     return (
       <section className={shell}>
         {header}
-        <div className={compact ? 'flex flex-wrap gap-2' : q.options!.length > 8 ? 'grid grid-cols-2 gap-2' : 'flex flex-col gap-2'}>
+        <div className={compact ? 'flex flex-wrap gap-2' : q.options!.length > 8 ? 'grid grid-cols-1 min-[380px]:grid-cols-2 gap-2' : 'flex flex-col gap-2'}>
           {q.options!.map(opt => {
             const active = multi ? picked.includes(opt) : value === opt
             const icon = multi ? (active ? 'check_box' : 'check_box_outline_blank') : active ? 'radio_button_checked' : 'radio_button_unchecked'

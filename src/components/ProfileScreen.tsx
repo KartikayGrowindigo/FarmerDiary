@@ -19,10 +19,10 @@ export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => vo
   ]
 
   return (
-    <div className="text-on-surface min-h-screen pb-32 flex flex-col">
+    <div className="text-on-surface min-h-screen min-h-dvh pb-[calc(8rem_+_env(safe-area-inset-bottom))] flex flex-col">
       <SceneHeader title="Profile" />
 
-      <main className="relative z-10 -mt-20 flex-1 px-margin-edge flex flex-col gap-stack-lg">
+      <main className="relative z-10 -mt-20 flex-1 w-full max-w-2xl mx-auto px-margin-edge flex flex-col gap-stack-lg">
         <div className="card anim-fade-up p-5 flex items-center gap-4 overflow-hidden relative" style={stagger(0)}>
           <div className="absolute right-0 top-0 bottom-0 w-28 opacity-40 [mask-image:linear-gradient(to_left,black,transparent)]">
             <PlotArt variant={1} className="w-full h-full" />
@@ -49,7 +49,7 @@ export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => vo
                   <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">{r.labelPa}</span>
                 </div>
               </div>
-              <span className="text-body-md font-body-md text-on-surface-variant text-right">{r.value}</span>
+              <span className="min-w-0 break-words text-body-md font-body-md text-on-surface-variant text-right">{r.value}</span>
             </div>
           ))}
         </div>
@@ -65,7 +65,7 @@ export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => vo
               <span className="block text-body-md font-bold text-on-surface truncate">{user.name || user.email}</span>
               <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant truncate">{user.email}</span>
             </div>
-            <button onClick={signOut} className="h-10 px-4 rounded-full bg-rose-50 text-rose-700 font-bold text-body-md active:scale-95 transition-transform">
+            <button onClick={signOut} className="h-11 px-4 shrink-0 rounded-full bg-rose-50 text-rose-700 font-bold text-body-md active:scale-95 transition-transform">
               Sign out
             </button>
           </div>

@@ -15,7 +15,7 @@ export default function HomeScreen({ onOpenPlot, onOpenSurvey }: { onOpenPlot: (
   const cycle = store.getCurrentCropCycle(plots[0]?.id)
 
   return (
-    <div className="min-h-screen text-on-surface pb-32">
+    <div className="min-h-screen min-h-dvh text-on-surface pb-[calc(8rem_+_env(safe-area-inset-bottom))]">
       <svg width={0} height={0} className="absolute" aria-hidden>
         <defs>
           <linearGradient id="ring-grad" x1="0" y1="0" x2="1" y2="1">
@@ -42,7 +42,7 @@ export default function HomeScreen({ onOpenPlot, onOpenSurvey }: { onOpenPlot: (
         </span>
       </SceneHeader>
 
-      <main className="relative z-10 -mt-14 px-margin-edge flex flex-col gap-stack-md">
+      <main className="relative z-10 -mt-14 w-full max-w-2xl mx-auto px-margin-edge flex flex-col gap-stack-md">
         {plots.map((plot, idx) => {
           const plotCycle = store.getCurrentCropCycle(plot.id)
           const activities = plotCycle ? store.getActivitiesForCropCycle(plotCycle.id) : []

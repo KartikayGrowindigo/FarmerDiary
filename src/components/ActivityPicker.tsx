@@ -35,10 +35,10 @@ export default function ActivityPicker({ plotId, onBack, onSelect }: { plotId: s
     : 'Choose what you did in the field'
 
   return (
-    <div className="text-on-background min-h-screen pb-24 font-body-md antialiased flex flex-col">
+    <div className="text-on-background min-h-screen min-h-dvh pb-[calc(6rem_+_env(safe-area-inset-bottom))] font-body-md antialiased flex flex-col">
       <SceneHeader title="Add Activity" subtitle={subtitle} onBack={onBack} />
 
-      <main className="relative z-10 -mt-16 flex-1 px-margin-edge">
+      <main className="relative z-10 -mt-16 flex-1 w-full max-w-2xl mx-auto px-margin-edge">
         <section className="card p-2 anim-fade-up">
           <div className="flex items-center justify-between px-3 pt-3 pb-1">
             <span className="text-label-caps font-label-caps uppercase tracking-widest text-on-surface-variant">Crop season</span>

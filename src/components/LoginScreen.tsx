@@ -20,13 +20,13 @@ export default function LoginScreen() {
   const error = state.status === 'signedOut' ? state.error : undefined
 
   return (
-    <div className="min-h-screen relative isolate text-on-surface">
+    <div className="min-h-screen min-h-dvh relative isolate text-on-surface">
       <Backdrop />
       <header className="relative overflow-hidden h-[300px]">
         <FieldScene className="absolute inset-0 w-full h-full" />
       </header>
 
-      <main className="relative z-10 -mt-24 px-margin-edge pb-10">
+      <main className="relative z-10 -mt-24 w-full max-w-md mx-auto px-margin-edge pb-[calc(2.5rem_+_env(safe-area-inset-bottom))]">
         <div className="card anim-fade-up p-6 flex flex-col items-center text-center gap-4">
           <Logo className="w-16 h-16 drop-shadow-md" />
           <div>

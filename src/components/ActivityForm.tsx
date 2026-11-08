@@ -64,16 +64,16 @@ export default function ActivityForm({
   const themeVars = { '--from': t.from, '--to': t.to, '--tint': t.tint, '--ink': t.ink } as React.CSSProperties
 
   return (
-    <div className="text-on-surface min-h-screen flex flex-col relative pb-36" style={themeVars}>
-      <header className="sticky top-0 z-20 overflow-hidden text-white shadow-lg" style={{ background: gradient }}>
+    <div className="text-on-surface min-h-screen min-h-dvh flex flex-col relative pb-[calc(9rem_+_env(safe-area-inset-bottom))]" style={themeVars}>
+      <header className="sticky top-0 z-20 overflow-hidden text-white shadow-lg pt-[env(safe-area-inset-top)]" style={{ background: gradient }}>
         <span className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/15" />
         <span className="absolute right-16 -bottom-12 w-24 h-24 rounded-full bg-white/10" />
-        <div className="relative flex items-center gap-3 w-full px-margin-edge py-stack-md">
+        <div className="relative flex items-center gap-3 w-full max-w-2xl mx-auto px-margin-edge py-stack-md">
           <button onClick={onBack} aria-label="Go back" className="h-11 w-11 -ml-1 shrink-0 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center active:scale-90 transition-transform">
             <span className="material-symbols-outlined text-[26px]">arrow_back</span>
           </button>
           <div className="flex-1 min-w-0 anim-fade-up">
-            <h1 className="text-headline-sm font-extrabold truncate">Add {mod.label}</h1>
+            <h1 className="text-headline-sm font-extrabold line-clamp-2">Add {mod.label}</h1>
             <p className="text-punjabi-subtext font-punjabi-subtext text-white/85 truncate">
               {mod.labelPa} ਸ਼ਾਮਲ ਕਰੋ{plot ? ` · Plot #${plot.id.slice(0, 3).toUpperCase()}` : ''}
             </p>
@@ -84,7 +84,7 @@ export default function ActivityForm({
         </div>
       </header>
 
-      <main className="flex-1 px-margin-edge py-stack-lg space-y-stack-md">
+      <main className="flex-1 w-full max-w-2xl mx-auto px-margin-edge py-stack-lg space-y-stack-md">
         <section className="anim-fade-up" style={stagger(0)}>
           <div className="card p-5 border-2 focus-within:border-[var(--to)] transition-colors">
             <label className="flex justify-between items-end mb-2">
@@ -125,7 +125,8 @@ export default function ActivityForm({
         )}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-margin-edge bg-white/70 backdrop-blur-xl z-20 border-t border-white">
+      <div className="fixed bottom-0 left-0 right-0 pt-margin-edge pb-[calc(20px_+_env(safe-area-inset-bottom))] bg-white/70 backdrop-blur-xl z-20 border-t border-white">
+        <div className="max-w-2xl mx-auto px-margin-edge">
         {(asked > done || issues > 0) && (
           <p className="mb-2 text-center text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">
             {asked > done && `${asked - done} question${asked - done === 1 ? '' : 's'} left`}
@@ -142,6 +143,7 @@ export default function ActivityForm({
           <span className="material-symbols-outlined">check_circle</span>
           Save Entry
         </button>
+        </div>
       </div>
     </div>
   )

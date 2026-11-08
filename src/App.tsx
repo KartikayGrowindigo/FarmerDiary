@@ -68,7 +68,7 @@ export default function App() {
   }
 
   return (
-    <div className="min-h-screen relative isolate">
+    <div className="min-h-screen min-h-dvh relative isolate">
       <Backdrop />
       <div key={screen.name + ('plotId' in screen ? screen.plotId : '')} className="anim-screen">
       {screen.name === 'home' && (

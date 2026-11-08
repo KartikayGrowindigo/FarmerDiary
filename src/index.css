@@ -9,7 +9,9 @@ html, body, #root {
 body {
   @apply text-on-surface;
   font-family: 'Plus Jakarta Sans', sans-serif;
-  min-height: max(884px, 100dvh);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-wrap: break-word;
   background: linear-gradient(180deg, #FFF6E5 0%, #F5F9EC 55%, #E8F5EE 100%) fixed;
 }
 

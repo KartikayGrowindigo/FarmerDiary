@@ -41,9 +41,10 @@ export default function SurveyScreen({ onBack }: { onBack: () => void }) {
     setAnswers(a => ({ ...a, fields: { ...a.fields, [plotId]: { ...fieldAnswers(a, plotId), [id]: v } } }))
 
   return (
-    <div className="text-on-surface min-h-screen flex flex-col relative pb-32" style={themeVars}>
-      <header className="sticky top-0 z-20 overflow-hidden text-white shadow-lg" style={{ background: gradient }}>
+    <div className="text-on-surface min-h-screen min-h-dvh flex flex-col relative pb-[calc(8rem_+_env(safe-area-inset-bottom))]" style={themeVars}>
+      <header className="sticky top-0 z-20 overflow-hidden text-white shadow-lg pt-[env(safe-area-inset-top)]" style={{ background: gradient }}>
         <span className="absolute -right-10 -top-10 w-40 h-40 rounded-full bg-white/15" />
+        <div className="max-w-2xl mx-auto">
         <div className="relative flex items-center gap-3 w-full px-margin-edge pt-stack-md">
           <button onClick={onBack} aria-label="Go back" className="h-11 w-11 -ml-1 shrink-0 rounded-full bg-white/20 backdrop-blur-md border border-white/30 flex items-center justify-center active:scale-90 transition-transform">
             <span className="material-symbols-outlined text-[26px]">arrow_back</span>
@@ -78,9 +79,10 @@ export default function SurveyScreen({ onBack }: { onBack: () => void }) {
             )
           })}
         </nav>
+        </div>
       </header>
 
-      <main className="flex-1 px-margin-edge py-stack-lg space-y-stack-md">
+      <main className="flex-1 w-full max-w-2xl mx-auto px-margin-edge py-stack-lg space-y-stack-md">
         {section ? (
           <>
             <div className="flex items-end justify-between gap-3 anim-fade-up">
@@ -104,7 +106,8 @@ export default function SurveyScreen({ onBack }: { onBack: () => void }) {
         )}
       </main>
 
-      <div className="fixed bottom-0 left-0 right-0 p-margin-edge bg-white/70 backdrop-blur-xl z-20 border-t border-white flex gap-3">
+      <div className="fixed bottom-0 left-0 right-0 pt-margin-edge pb-[calc(20px_+_env(safe-area-inset-bottom))] bg-white/70 backdrop-blur-xl z-20 border-t border-white">
+        <div className="max-w-2xl mx-auto px-margin-edge flex gap-3">
         {step > 0 && (
           <button onClick={() => setStep(step - 1)} className="h-touch-target-min px-5 rounded-2xl bg-white border-2 border-[var(--tint)] text-[var(--ink)] font-extrabold flex items-center gap-1 active:scale-[0.97] transition-transform">
             <span className="material-symbols-outlined">chevron_left</span>
@@ -118,6 +121,7 @@ export default function SurveyScreen({ onBack }: { onBack: () => void }) {
         >
           {step < REVIEW ? (<>Next <span className="material-symbols-outlined">chevron_right</span></>) : (<><span className="material-symbols-outlined">check_circle</span> Done</>)}
         </button>
+        </div>
       </div>
     </div>
   )

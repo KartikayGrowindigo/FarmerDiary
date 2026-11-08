@@ -33,7 +33,7 @@ export default function PlotDetailScreen({ plotId, onBack, onAdd }: { plotId: st
   let n = 0
 
   return (
-    <div className="text-on-surface font-sans min-h-screen pb-28">
+    <div className="text-on-surface font-sans min-h-screen min-h-dvh pb-[calc(7rem_+_env(safe-area-inset-bottom))]">
       <SceneHeader
         title={`Plot #${plot.id.slice(0, 3).toUpperCase()}`}
         onBack={onBack}
@@ -46,7 +46,7 @@ export default function PlotDetailScreen({ plotId, onBack, onAdd }: { plotId: st
         }
       />
 
-      <main className="relative z-10 -mt-12 px-margin-edge">
+      <main className="relative z-10 -mt-12 w-full max-w-2xl mx-auto px-margin-edge">
         {groups.length === 0 && (
           <div className="card anim-fade-up text-center text-on-surface-variant py-12 px-6 flex flex-col items-center">
             <ModuleArt moduleKey="Seed & Sowing" className="w-20 h-20 mb-3 anim-float" />
@@ -100,7 +100,7 @@ export default function PlotDetailScreen({ plotId, onBack, onAdd }: { plotId: st
         ))}
       </main>
 
-      <button onClick={onAdd} aria-label="Add activity" className="fixed bottom-6 right-margin-edge w-16 h-16 z-40">
+      <button onClick={onAdd} aria-label="Add activity" className="fixed bottom-[calc(1.5rem_+_env(safe-area-inset-bottom))] right-margin-edge w-16 h-16 z-40">
         <span className="absolute inset-0 rounded-full bg-amber-400 anim-pulse-ring" />
         <span className="relative w-full h-full rounded-full bg-gradient-to-br from-amber-400 via-orange-500 to-rose-500 shadow-lg shadow-orange-500/40 flex items-center justify-center hover:scale-105 active:scale-90 transition-transform text-white">
           <span className="material-symbols-outlined text-[32px]">add</span>
