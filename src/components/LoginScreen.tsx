@@ -1,5 +1,5 @@
-import React from 'react'
-import { useAuth, authConfigured, devBypassAvailable, ALLOWED_DOMAIN } from '../lib/auth'
+import React, { useState } from 'react'
+import { useAuth, authConfigured, devBypassAvailable, microsoftEnabled, ALLOWED_DOMAIN } from '../lib/auth'
 import { FieldScene, Logo } from './art'
 import { Backdrop } from './ui'
 
@@ -15,9 +15,11 @@ function MicrosoftMark() {
 }
 
 export default function LoginScreen() {
-  const { state, signIn, continueInDevMode } = useAuth()
+  const { state, signInWithPassword, signInWithMicrosoft, continueInDevMode } = useAuth()
   const loading = state.status === 'loading'
   const error = state.status === 'signedOut' ? state.error : undefined
+  const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
   return (
     <div className="min-h-screen min-h-dvh relative isolate text-on-surface">
@@ -34,23 +36,63 @@ export default function LoginScreen() {
             <p className="text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">ਖੇਤੀ ਪੋਰਟਲ</p>
           </div>
           <p className="text-body-md text-on-surface-variant">
-            Sign in with your Grow Indigo Microsoft account.
+            Sign in with your Grow Indigo account.
           </p>
 
           {authConfigured && (
+            <form
+              className="w-full flex flex-col gap-3 text-left"
+              onSubmit={e => { e.preventDefault(); signInWithPassword(email, password) }}
+            >
+              <label className="block">
+                <span className="block text-body-md font-bold mb-1">Email</span>
+                <input
+                  type="email"
+                  autoComplete="username"
+                  inputMode="email"
+                  required
+                  value={email}
+                  onChange={e => setEmail(e.target.value)}
+                  placeholder={`name@${ALLOWED_DOMAIN}`}
+                  className="w-full h-touch-target-min rounded-2xl bg-stone-50 border-2 border-stone-200 px-4 text-body-lg outline-none focus:border-emerald-600"
+                />
+              </label>
+              <label className="block">
+                <span className="block text-body-md font-bold mb-1">Password</span>
+                <input
+                  type="password"
+                  autoComplete="current-password"
+                  required
+                  value={password}
+                  onChange={e => setPassword(e.target.value)}
+                  className="w-full h-touch-target-min rounded-2xl bg-stone-50 border-2 border-stone-200 px-4 text-body-lg outline-none focus:border-emerald-600"
+                />
+              </label>
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full h-touch-target-min rounded-2xl bg-emerald-700 text-white flex items-center justify-center gap-2 text-body-lg font-extrabold active:scale-[0.97] transition-transform disabled:opacity-60"
+              >
+                {loading && <span className="material-symbols-outlined animate-spin">progress_activity</span>}
+                {loading ? 'Checking sign-in…' : 'Sign in'}
+              </button>
+            </form>
+          )}
+
+          {microsoftEnabled && (
             <button
-              onClick={signIn}
+              onClick={signInWithMicrosoft}
               disabled={loading}
               className="w-full h-touch-target-min rounded-2xl bg-white border-2 border-stone-200 shadow-sm flex items-center justify-center gap-3 text-body-lg font-extrabold active:scale-[0.97] transition-transform disabled:opacity-60"
             >
-              {loading ? <span className="material-symbols-outlined animate-spin">progress_activity</span> : <MicrosoftMark />}
-              {loading ? 'Checking sign-in…' : 'Sign in with Microsoft'}
+              <MicrosoftMark />
+              Sign in with Microsoft
             </button>
           )}
 
           {!authConfigured && (
             <div className="w-full rounded-2xl bg-amber-50 border border-amber-200 p-4 text-left text-body-md text-amber-900">
-              Sign-in is not configured. Set <code className="font-bold">VITE_AZURE_CLIENT_ID</code> in <code className="font-bold">.env</code> (see README).
+              No database connected. Set <code className="font-bold">VITE_SUPABASE_URL</code> and <code className="font-bold">VITE_SUPABASE_ANON_KEY</code> in <code className="font-bold">.env</code> (see README).
             </div>
           )}
 

@@ -3,8 +3,27 @@ import store from '../lib/store'
 import { PlotArt } from './art'
 import { SceneHeader, Initials, SurveyCard, stagger } from './ui'
 import { useAuth } from '../lib/auth'
+import { syncNow, useSyncStatus } from '../lib/sync'
 
-export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => void }) {
+// Whether this phone's entries have reached the database.
+function SyncLine() {
+  const sync = useSyncStatus()
+  const time = sync.syncedAt ? new Date(sync.syncedAt).toLocaleTimeString('en-IN', { hour: 'numeric', minute: '2-digit' }) : null
+  const [icon, tone, text] =
+    sync.state === 'syncing' ? ['sync', 'text-sky-700', 'Syncing…'] :
+    sync.state === 'error' ? ['error', 'text-rose-700', `Sync failed: ${sync.error}`] :
+    sync.pending > 0 ? ['cloud_upload', 'text-amber-700', `${sync.pending} change${sync.pending === 1 ? '' : 's'} waiting to upload${sync.state === 'offline' ? ' · no signal' : ''}`] :
+    sync.state === 'offline' ? ['cloud_off', 'text-on-surface-variant', `No signal${time ? ` · last synced ${time}` : ''}`] :
+    ['cloud_done', 'text-emerald-700', `All changes saved${time ? ` · synced ${time}` : ''}`]
+  return (
+    <button onClick={() => syncNow()} className={`mt-1 flex items-start gap-1 text-left text-label-caps font-label-caps normal-case tracking-normal ${tone}`}>
+      <span className={`material-symbols-outlined text-[16px] ${sync.state === 'syncing' ? 'animate-spin' : ''}`}>{icon}</span>
+      <span className="min-w-0 break-words">{text}</span>
+    </button>
+  )
+}
+
+export default function ProfileScreen({ onOpenSurvey, onOpenAssessments }: { onOpenSurvey: () => void; onOpenAssessments?: () => void }) {
   const { user, signOut } = useAuth()
   const farmer = store.getFarmers()[0]
   const plots = store.getPlots().filter(p => p.farmerId === farmer.id)
@@ -56,6 +75,24 @@ export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => vo
 
         <SurveyCard onClick={onOpenSurvey} style={stagger(rows.length + 2)} />
 
+        {onOpenAssessments && (
+          <button
+            onClick={onOpenAssessments}
+            style={stagger(rows.length + 3)}
+            className="card anim-fade-up w-full p-4 text-left flex items-center gap-4 active:scale-[0.98] hover:-translate-y-0.5 transition-transform duration-200"
+          >
+            <span className="w-14 h-14 rounded-2xl bg-gradient-to-br from-emerald-700 to-teal-500 text-white flex items-center justify-center shrink-0 shadow-md">
+              <span className="material-symbols-outlined text-[30px]">assignment</span>
+            </span>
+            <span className="flex-1 min-w-0">
+              <span className="block text-label-caps font-label-caps text-emerald-700 tracking-widest">ADMIN · COOL FARM PLATFORM</span>
+              <span className="block text-body-lg font-extrabold text-on-surface">Assessments</span>
+              <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant">Crop GHG assessments by section</span>
+            </span>
+            <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+          </button>
+        )}
+
         {user && (
           <div className="card anim-fade-up p-4 flex items-center gap-3" style={stagger(rows.length + 3)}>
             <span className="w-10 h-10 rounded-2xl bg-stone-100 text-stone-700 flex items-center justify-center shrink-0">
@@ -64,6 +101,7 @@ export default function ProfileScreen({ onOpenSurvey }: { onOpenSurvey: () => vo
             <div className="flex-1 min-w-0">
               <span className="block text-body-md font-bold text-on-surface truncate">{user.name || user.email}</span>
               <span className="block text-punjabi-subtext font-punjabi-subtext text-on-surface-variant truncate">{user.email}</span>
+              {user.id && <SyncLine />}
             </div>
             <button onClick={signOut} className="h-11 px-4 shrink-0 rounded-full bg-rose-50 text-rose-700 font-bold text-body-md active:scale-95 transition-transform">
               Sign out

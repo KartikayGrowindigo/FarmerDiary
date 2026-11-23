@@ -1,18 +1,21 @@
 import React from 'react'
 
-export type NavKey = 'home' | 'add' | 'impact' | 'profile'
+export type NavKey = 'home' | 'add' | 'impact' | 'assessments' | 'profile'
 
-const ITEMS: { key: NavKey; icon: string; label: string }[] = [
+const ITEMS: { key: NavKey; icon: string; label: string; adminOnly?: boolean }[] = [
   { key: 'home', icon: 'home', label: 'Home' },
   { key: 'add', icon: 'add', label: 'Add' },
   { key: 'impact', icon: 'insights', label: 'Impact' },
+  { key: 'assessments', icon: 'assignment', label: 'Assess', adminOnly: true },
   { key: 'profile', icon: 'person', label: 'Profile' }
 ]
 
-export default function BottomNav({ active, onNavigate }: { active: NavKey; onNavigate: (k: NavKey) => void }) {
+export default function BottomNav({ active, onNavigate, showAssessments = false }: { active: NavKey; onNavigate: (k: NavKey) => void; showAssessments?: boolean }) {
+  const items = ITEMS.filter(i => !i.adminOnly || showAssessments)
+  const tight = items.length > 4
   return (
     <nav className="fixed bottom-[calc(0.75rem_+_env(safe-area-inset-bottom))] inset-x-3 mx-auto max-w-md z-50 h-[68px] px-2 rounded-[28px] bg-white/80 backdrop-blur-xl border border-white shadow-[0_12px_32px_-8px_rgba(20,60,40,0.35)] flex justify-around items-center">
-      {ITEMS.map(item => {
+      {items.map(item => {
         const isActive = item.key === active
 
         if (item.key === 'add') {
@@ -31,7 +34,8 @@ export default function BottomNav({ active, onNavigate }: { active: NavKey; onNa
           <button
             key={item.key}
             onClick={() => onNavigate(item.key)}
-            className={`flex flex-col items-center justify-center px-4 py-1.5 rounded-2xl active:scale-90 transition-all duration-300 ${isActive ? 'bg-emerald-100 text-emerald-800' : 'text-on-surface-variant'}`}
+            aria-current={isActive ? 'page' : undefined}
+            className={`flex flex-col items-center justify-center ${tight ? 'px-2.5' : 'px-4'} py-1.5 rounded-2xl active:scale-90 transition-all duration-300 ${isActive ? 'bg-emerald-100 text-emerald-800' : 'text-on-surface-variant'}`}
           >
             <span className={`material-symbols-outlined ${isActive ? 'anim-pop' : ''}`}>{item.icon}</span>
             <span className="text-label-caps font-label-caps mt-0.5">{item.label}</span>
