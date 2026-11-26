@@ -6,6 +6,7 @@ import {
 import { REGEN_COLUMNS, CROP_COLUMNS } from '../config/fatColumns'
 import { MANURE, PREVIOUS_RESIDUE } from '../config/moduleFields'
 import { cftPayload } from './diary'
+import { csvCell } from './csv'
 
 const round = (v: number, dp = 4) => Math.round(v * 10 ** dp) / 10 ** dp
 const cap = (s?: string) => (s ? s[0].toUpperCase() + s.slice(1) : s)
@@ -165,11 +166,6 @@ export function mergePrefill(prefill: Answers, saved: Answers = {}) {
     answers.fields[plotId] = { ...prefilled.fields[plotId], ...s }
   }
   return { prefilled, answers }
-}
-
-function csvCell(v: any) {
-  const s = v === undefined || v === null ? '' : String(v)
-  return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
 }
 
 function toCsv(columns: string[], rows: Record<string, any>[]) {

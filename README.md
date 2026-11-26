@@ -17,7 +17,7 @@ Database & sign-in (Supabase)
 
 Set up a Supabase project
 1. Create a project at supabase.com (region: Mumbai). Keep the database password.
-2. SQL Editor -> New query: paste and run `supabase/migrations/20261110000000_init.sql`, then `supabase/seed.sql` (once each).
+2. SQL Editor -> New query: paste and run each file in `supabase/migrations/` in name order (`..._init.sql`, `..._assessments.sql`, `..._security_hardening.sql`), then `supabase/seed.sql` (once each).
 3. Authentication -> Sign In / Providers: turn off "Allow new users to sign up" (keep Email enabled).
 4. Authentication -> Users -> Add user -> Create new user: @growindigo.co.in email + password, tick "Auto Confirm User".
 5. SQL Editor: make the first account admin and give it the demo farmer:
@@ -27,6 +27,9 @@ Set up a Supabase project
    select id, 'farmer-1' from public.staff where email = 'you@growindigo.co.in';
    ```
 6. Project Settings -> API: copy the Project URL and the anon/publishable key into `.env` (see `.env.example`) and into the Vercel project's environment variables, then redeploy.
+
+Security
+- Database access rules are tested on a real Postgres (PGlite) in `supabase/tests/rls.test.ts` (`npm test`). Security headers (CSP etc.) are set in `vercel.json`. Audit, test results and the production checklist are in `security-audit/`.
 
 Adding staff and farmers (for now, in the Supabase dashboard)
 - New staff: Authentication -> Users -> Add user (as in step 4), then assign farmers in Table Editor -> `farmer_access`.

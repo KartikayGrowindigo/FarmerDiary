@@ -137,6 +137,7 @@ async function downloadAssessments(): Promise<Pick<ServerSnapshot, 'assessments'
 export const assessmentTablesMissing = () => assessmentsMissing
 
 async function download() {
+  const who = store.account()
   const [farmers, plots, cycles, activities, surveys, assessments] = await Promise.all([
     fetchAll('farmers', ['name', 'id']),
     fetchAll('plots', ['created_at', 'id']),
@@ -153,6 +154,8 @@ async function download() {
     surveys: Object.fromEntries(surveys.map(toSurvey).map(s => [s.farmerId, s])),
     ...assessments
   }
+  // Signed out (or switched account) while downloading: don't write this account's data back onto the phone.
+  if (store.account() !== who) return
   store.applyServer(snapshot)
 }
 

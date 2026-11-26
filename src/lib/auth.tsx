@@ -111,6 +111,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       if (event === 'SIGNED_IN' || event === 'TOKEN_REFRESHED') accept(session)
       // Session revoked or expired for good (e.g. the account was removed): back to the login page.
       if (event === 'SIGNED_OUT') {
+        if (store.pendingCount() === 0) store.forgetAccount()
         localStorage.removeItem(LAST_USER)
         store.setAccount(null)
         setState(s => (s.status === 'signedIn' ? { status: 'signedOut', error: 'Your session ended. Please sign in again.' } : s))
@@ -144,7 +145,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     async signOut() {
       const waiting = store.pendingCount()
       if (waiting && !window.confirm(`${waiting} change${waiting === 1 ? ' hasn\'t' : 's haven\'t'} uploaded yet. They stay on this phone and upload when you sign in again. Sign out anyway?`)) return
-      // Clears only this app's session; the phone's copy stays so offline work isn't lost.
+      // Clears only this app's session. With nothing waiting to upload, the phone's copy of the farmers' data is
+      // removed too (it downloads again at the next sign-in); otherwise it stays so offline work isn't lost.
+      if (!waiting) store.forgetAccount()
       if (supabase) await supabase.auth.signOut({ scope: 'local' })
       localStorage.removeItem(LAST_USER)
       store.setAccount(null)

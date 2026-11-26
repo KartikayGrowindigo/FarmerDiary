@@ -3,6 +3,7 @@ import { Farmer } from '../../types'
 import { flattenAnswers } from './engine'
 import { STATUS_LABEL } from './lifecycle'
 import { Assessment } from './types'
+import { csvCell } from '../csv'
 
 // Admin exports of assessment inputs. Never includes calculated values (there are none yet).
 
@@ -36,10 +37,6 @@ export function assessmentJson(a: Assessment, farmer?: Farmer) {
   }
 }
 
-const csvCell = (v: unknown) => {
-  const s = v === null || v === undefined ? '' : String(v)
-  return /[",\n\r]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s
-}
 export const toCsv = (rows: unknown[][]) => rows.map(r => r.map(csvCell).join(',')).join('\r\n') + '\r\n'
 
 /** One row per answer (repeated records numbered), then one row per section note. */

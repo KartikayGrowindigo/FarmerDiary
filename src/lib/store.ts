@@ -111,6 +111,12 @@ export const store = {
   account() {
     return account
   },
+  /** Remove the signed-in account's copy from this phone (farmer names, contacts, answers). Only call when nothing is waiting to upload. */
+  forgetAccount() {
+    if (!account) return
+    localStorage.removeItem(accountKey(account))
+    cache = null
+  },
   setAdmin(value: boolean) {
     if (value === admin) return
     admin = value
